@@ -1,0 +1,140 @@
+// Prisma schema — Dashboard de Controle de Trading Esportivo
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrigemSnapshot {
+  CONFIRMACAO_MANUAL
+  RESULTADO_APOSTA
+}
+
+enum StatusAposta {
+  PENDENTE
+  GREEN
+  RED
+  REEMBOLSO
+  MEIA_GREEN
+  MEIA_RED
+  CANCELADA
+}
+
+enum CategoriaRisco {
+  BAIXO
+  MEDIO
+  MEDIO_ALTO
+  ALTO_ESPECULATIVO
+}
+
+enum StatusTrava {
+  ATIVA
+  REMOVIDA
+}
+
+model Casa {
+  id            String   @id @default(cuid())
+  nome          String   @unique
+  saldoAtual    Decimal  @default(0) @db.Decimal(12, 2)
+  ativa         Boolean  @default(true)
+  criadaEm      DateTime @default(now())
+  atualizadaEm  DateTime @updatedAt
+
+  snapshots SaldoSnapshot[]
+  apostas   Aposta[]
+
+  @@index([ativa])
+}
+
+model SaldoSnapshot {
+  id      String         @id @default(cuid())
+  casaId  String
+  casa    Casa           @relation(fields: [casaId], references: [id], onDelete: Cascade)
+  saldo   Decimal        @db.Decimal(12, 2)
+  data    DateTime       @default(now())
+  origem  OrigemSnapshot
+
+  @@index([casaId, data])
+}
+
+model Competicao {
+  id     String  @id @default(cuid())
+  nome   String  @unique
+  pais   String?
+
+  apostas Aposta[]
+  travas  Trava[]
+
+  @@index([nome])
+}
+
+model Mercado {
+  id   String @id @default(cuid())
+  nome String @unique
+
+  apostas Aposta[]
+  travas  Trava[]
+
+  @@index([nome])
+}
+
+model Aposta {
+  id                String          @id @default(cuid())
+  data              DateTime
+  competicaoId      String
+  competicao        Competicao      @relation(fields: [competicaoId], references: [id])
+  jogoDescricao     String
+  mercadoId         String
+  mercado           Mercado         @relation(fields: [mercadoId], references: [id])
+  entradaDescricao  String
+  casaId            String
+  casa              Casa            @relation(fields: [casaId], references: [id])
+  odd               Decimal         @db.Decimal(8, 3)
+  stake             Decimal         @db.Decimal(12, 2)
+  pJusta            Decimal?        @db.Decimal(6, 3)
+  evPercentual      Decimal?        @db.Decimal(8, 3)
+  categoriaRisco    CategoriaRisco?
+  omaEfetiva        Decimal?        @db.Decimal(8, 3)
+  status            StatusAposta    @default(PENDENTE)
+  retornoReal       Decimal?        @db.Decimal(12, 2)
+  lucroPrejuizo     Decimal?        @db.Decimal(12, 2)
+  travaAtiva        Boolean         @default(false)
+  notas             String?
+  criadaEm          DateTime        @default(now())
+  atualizadaEm      DateTime        @updatedAt
+
+  @@index([status])
+  @@index([competicaoId, mercadoId])
+  @@index([casaId])
+  @@index([data])
+}
+
+model Trava {
+  id                              String       @id @default(cuid())
+  competicaoId                    String?
+  competicao                      Competicao?  @relation(fields: [competicaoId], references: [id])
+  mercadoId                       String
+  mercado                         Mercado      @relation(fields: [mercadoId], references: [id])
+  status                          StatusTrava  @default(ATIVA)
+  motivoAtivacao                  String
+  tetoRisco                       CategoriaRisco
+  dataAtivacao                    DateTime     @default(now())
+  dataRemocao                     DateTime?
+  rodadasPositivasConsecutivas    Int          @default(0)
+
+  @@index([competicaoId, mercadoId])
+  @@index([status])
+}
+
+model Unidade {
+  id                String   @id @default(cuid())
+  valor             Decimal  @db.Decimal(12, 2)
+  bancaTotalNaEpoca Decimal  @db.Decimal(12, 2)
+  data              DateTime @default(now())
+
+  @@index([data])
+}
