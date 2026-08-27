@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { formatBRL, formatDateTime } from "@/lib/format";
 import { unidadeSugerida } from "@/lib/betting";
 import { EvolucaoChart, type SnapshotPoint } from "@/components/evolucao-chart";
+import { StatCard } from "@/components/stat-card";
 import { NovaCasaDialog, AtualizarSaldoDialog } from "./casa-dialogs";
 import { toggleCasaAtivaAction } from "./actions";
 
@@ -47,26 +48,8 @@ export default async function BancasPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Banca total (casas ativas)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-semibold">{formatBRL(bancaTotal)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Unidade sugerida (2%)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-semibold">{formatBRL(unidade)}</p>
-          </CardContent>
-        </Card>
+        <StatCard label="Banca total (casas ativas)" value={formatBRL(bancaTotal)} />
+        <StatCard label="Unidade sugerida (2%)" value={formatBRL(unidade)} />
       </div>
 
       <Card>
@@ -96,7 +79,9 @@ export default async function BancasPage() {
                 {!casa.ativa ? <Badge variant="secondary">Aposentada</Badge> : null}
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-2xl font-semibold">{formatBRL(casa.saldoAtual)}</p>
+                <p className="tabular text-2xl font-semibold tracking-tight">
+                  {formatBRL(casa.saldoAtual)}
+                </p>
                 {saldoBaixo ? (
                   <div className="flex items-center gap-1.5 text-xs text-amber-500">
                     <AlertTriangle className="size-3.5" />

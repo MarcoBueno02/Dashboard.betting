@@ -62,21 +62,21 @@ export default async function SegmentadoPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{l.mercadoNome}</TableCell>
-                  <TableCell className="text-right text-emerald-500">{l.green}</TableCell>
-                  <TableCell className="text-right text-red-500">{l.red}</TableCell>
-                  <TableCell className="text-right">{formatPercent(l.winRate)}</TableCell>
+                  <TableCell className="tabular text-right text-emerald-500">{l.green}</TableCell>
+                  <TableCell className="tabular text-right text-red-500">{l.red}</TableCell>
+                  <TableCell className="tabular text-right">{formatPercent(l.winRate)}</TableCell>
                   <TableCell
                     className={cn(
-                      "text-right font-medium",
+                      "tabular text-right font-semibold",
                       l.roi >= 0 ? "text-emerald-500" : "text-red-500"
                     )}
                   >
                     {formatPercent(l.roi)}
                   </TableCell>
-                  <TableCell className="text-right">{formatBRL(l.stakeTotal)}</TableCell>
+                  <TableCell className="tabular text-right">{formatBRL(l.stakeTotal)}</TableCell>
                   <TableCell
                     className={cn(
-                      "text-right font-medium",
+                      "tabular text-right font-semibold",
                       l.lucroTotal >= 0 ? "text-emerald-500" : "text-red-500"
                     )}
                   >

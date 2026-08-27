@@ -18,9 +18,11 @@ export function StatCard({
         <CardTitle className="text-sm font-medium text-muted-foreground">{label}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-semibold">{value}</p>
+        <p className="tabular text-2xl font-semibold tracking-tight">{value}</p>
         {hint ? (
-          <p className={cn("mt-1 text-xs text-muted-foreground", hintClassName)}>{hint}</p>
+          <p className={cn("mt-1.5 text-xs font-medium text-muted-foreground", hintClassName)}>
+            {hint}
+          </p>
         ) : null}
       </CardContent>
     </Card>

@@ -143,7 +143,7 @@ export default async function DashboardPage() {
                     <StatusBadge status={a.status} />
                   </TableCell>
                   <TableCell
-                    className={`text-right font-medium ${
+                    className={`tabular text-right font-semibold ${
                       a.lucroPrejuizo === null
                         ? "text-muted-foreground"
                         : Number(a.lucroPrejuizo) >= 0

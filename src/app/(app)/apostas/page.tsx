@@ -102,8 +102,8 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
                   <TableCell className="whitespace-nowrap">{a.mercado.nome}</TableCell>
                   <TableCell className="max-w-[160px] truncate">{a.entradaDescricao}</TableCell>
                   <TableCell className="whitespace-nowrap">{a.casa.nome}</TableCell>
-                  <TableCell>{Number(a.odd).toFixed(2)}</TableCell>
-                  <TableCell>{formatBRL(a.stake)}</TableCell>
+                  <TableCell className="tabular">{Number(a.odd).toFixed(2)}</TableCell>
+                  <TableCell className="tabular">{formatBRL(a.stake)}</TableCell>
                   <TableCell>
                     <RiscoBadge risco={a.categoriaRisco} />
                   </TableCell>
@@ -111,7 +111,7 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
                     <StatusBadge status={a.status} />
                   </TableCell>
                   <TableCell
-                    className={`text-right font-medium ${
+                    className={`tabular text-right font-semibold ${
                       a.lucroPrejuizo === null
                         ? "text-muted-foreground"
                         : Number(a.lucroPrejuizo) >= 0
