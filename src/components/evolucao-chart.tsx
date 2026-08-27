@@ -84,26 +84,30 @@ export function EvolucaoChart({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Tabs value={serie} onValueChange={setSerie}>
-          <TabsList>
-            <TabsTrigger value="TOTAL">Total</TabsTrigger>
-            {casas.map((c) => (
-              <TabsTrigger key={c.id} value={c.id}>
-                {c.nome}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-        <Tabs value={String(periodo)} onValueChange={(v) => setPeriodo(Number(v))}>
-          <TabsList>
-            {PERIODOS.map((p) => (
-              <TabsTrigger key={p.label} value={String(p.dias)}>
-                {p.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="-mx-1 min-w-0 overflow-x-auto px-1">
+          <Tabs value={serie} onValueChange={setSerie}>
+            <TabsList>
+              <TabsTrigger value="TOTAL">Total</TabsTrigger>
+              {casas.map((c) => (
+                <TabsTrigger key={c.id} value={c.id}>
+                  {c.nome}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="-mx-1 min-w-0 overflow-x-auto px-1">
+          <Tabs value={String(periodo)} onValueChange={(v) => setPeriodo(Number(v))}>
+            <TabsList>
+              {PERIODOS.map((p) => (
+                <TabsTrigger key={p.label} value={String(p.dias)}>
+                  {p.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
       </div>
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
