@@ -25,22 +25,41 @@ export function formatPercent(value: NumericInput, digits = 1) {
   return `${formatNumber(value, digits)}%`;
 }
 
+// O app é usado só no Brasil (bancas, casas e jogos em horário BRT). O servidor
+// (Vercel) roda em UTC, então sem fixar o timeZone aqui, um jogo que começou às
+// 21h+ BRT (UTC-3) — muito comum no Brasileirão — vira o dia seguinte em UTC e
+// aparece com a data errada na tela. BRT não observa horário de verão desde
+// 2019, então o offset fixo é seguro.
+const TZ = "America/Sao_Paulo";
+
 export function formatDate(value: Date | string | null | undefined) {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
-  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(date);
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: TZ }).format(date);
 }
 
 export function formatDateTime(value: Date | string | null | undefined) {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
-  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(date);
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: TZ,
+  }).format(date);
 }
 
 export function toInputDate(value: Date | string | null | undefined) {
   if (!value) return "";
   const date = typeof value === "string" ? new Date(value) : value;
-  const offset = date.getTimezoneOffset();
-  const local = new Date(date.getTime() - offset * 60_000);
-  return local.toISOString().slice(0, 16);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "00";
+  return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}`;
 }

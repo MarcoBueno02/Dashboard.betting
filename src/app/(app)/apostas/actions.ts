@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { computeLucro } from "@/lib/betting";
+import { computeLucro, parseDataInputBRT } from "@/lib/betting";
 import { registrarNovaUnidade } from "@/lib/unidade";
 import { CategoriaRisco, Prisma, StatusAposta } from "@prisma/client";
 
@@ -112,7 +112,7 @@ export async function createApostaAction(
   await prisma.$transaction(async (tx) => {
     await tx.aposta.create({
       data: {
-        data: new Date(d.data),
+        data: parseDataInputBRT(d.data),
         competicaoId: d.competicaoId,
         jogoDescricao: d.jogoDescricao,
         mercadoId: d.mercadoId,

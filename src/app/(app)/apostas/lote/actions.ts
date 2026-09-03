@@ -13,6 +13,7 @@ const rowSchema = z.object({
 });
 
 const loteSchema = z.object({
+  data: z.string().min(1),
   competicaoId: z.string().min(1),
   mercadoId: z.string().min(1),
   rows: z.array(rowSchema).min(1),
@@ -28,7 +29,10 @@ export async function createApostasLoteAction(
     return { error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   }
 
-  const { competicaoId, mercadoId, rows } = parsed.data;
+  const { data, competicaoId, mercadoId, rows } = parsed.data;
+  // Ancorado ao meio-dia BRT para não cair no dia anterior/seguinte por
+  // arredondamento de timezone, independente de onde isso for lido depois.
+  const dataJogos = new Date(`${data}T12:00:00-03:00`);
 
   const trava = await prisma.trava.findFirst({
     where: { status: "ATIVA", mercadoId, OR: [{ competicaoId }, { competicaoId: null }] },
@@ -36,7 +40,7 @@ export async function createApostasLoteAction(
 
   await prisma.aposta.createMany({
     data: rows.map((r) => ({
-      data: new Date(),
+      data: dataJogos,
       competicaoId,
       mercadoId,
       jogoDescricao: r.jogoDescricao,

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -36,6 +37,7 @@ export function LoteForm({
   const router = useRouter();
   const [texto, setTexto] = useState("");
   const [rows, setRows] = useState<LoteRow[] | null>(null);
+  const [data, setData] = useState(() => new Date().toISOString().slice(0, 10));
   const [competicaoId, setCompeticaoId] = useState<string | undefined>();
   const [mercadoId, setMercadoId] = useState<string | undefined>();
   const [pending, startTransition] = useTransition();
@@ -47,9 +49,10 @@ export function LoteForm({
   }
 
   function handleConfirmar() {
-    if (!competicaoId || !mercadoId || validas.length === 0) return;
+    if (!data || !competicaoId || !mercadoId || validas.length === 0) return;
     startTransition(async () => {
       const result = await createApostasLoteAction({
+        data,
         competicaoId,
         mercadoId,
         rows: validas.map((r) => ({
@@ -73,7 +76,16 @@ export function LoteForm({
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="space-y-2">
+          <Label htmlFor="data-lote">Data dos jogos (aplicada a todas as linhas)</Label>
+          <Input
+            id="data-lote"
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+          />
+        </div>
         <div className="space-y-2">
           <Label>Competição (aplicada a todas as linhas)</Label>
           <ComboboxCreatable
@@ -160,13 +172,13 @@ export function LoteForm({
         <div className="flex items-center gap-3">
           <Button
             onClick={handleConfirmar}
-            disabled={pending || !competicaoId || !mercadoId || validas.length === 0}
+            disabled={pending || !data || !competicaoId || !mercadoId || validas.length === 0}
           >
             {pending ? "Registrando..." : `Confirmar ${validas.length} apostas`}
           </Button>
-          {!competicaoId || !mercadoId ? (
+          {!data || !competicaoId || !mercadoId ? (
             <p className="text-xs text-muted-foreground">
-              Selecione competição e mercado para confirmar.
+              Selecione data, competição e mercado para confirmar.
             </p>
           ) : null}
         </div>

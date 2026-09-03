@@ -26,8 +26,11 @@ export function buildApostaWhere(sp: ApostasSearchParams): Prisma.ApostaWhereInp
 
   if (de || ate) {
     where.data = {};
-    if (de) where.data.gte = new Date(`${de}T00:00:00`);
-    if (ate) where.data.lte = new Date(`${ate}T23:59:59`);
+    // "de"/"ate" são datas soltas (input type=date) para o dia local (BRT,
+    // UTC-3) do usuário — sem o offset explícito, o servidor (UTC) leria os
+    // limites do dia errado.
+    if (de) where.data.gte = new Date(`${de}T00:00:00-03:00`);
+    if (ate) where.data.lte = new Date(`${ate}T23:59:59-03:00`);
   }
 
   if (q) {

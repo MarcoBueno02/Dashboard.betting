@@ -46,6 +46,16 @@ export function round2(value: number) {
   return Math.round(value * 100) / 100;
 }
 
+/**
+ * Um input `datetime-local` do navegador chega como "YYYY-MM-DDTHH:mm", sem
+ * timezone — interpretado por `new Date()` no servidor (Vercel, UTC) isso
+ * vira UTC direto em vez do horário local do usuário (BRT, UTC-3). Fixamos o
+ * offset -03:00 explicitamente porque o app só é usado no Brasil.
+ */
+export function parseDataInputBRT(value: string): Date {
+  return new Date(`${value}:00-03:00`);
+}
+
 export const STATUS_RESOLVIDOS_PARA_STATS: StatusAposta[] = [
   "GREEN",
   "RED",
