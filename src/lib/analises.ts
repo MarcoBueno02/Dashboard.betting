@@ -3,7 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { maioresSequencias, round2, STATUS_RESOLVIDOS_PARA_STATS } from "@/lib/betting";
 import type { CategoriaRisco } from "@prisma/client";
 
-const RESOLVIDOS = Prisma.sql`${Prisma.join(STATUS_RESOLVIDOS_PARA_STATS)}`;
+// Lista fixa de constantes internas (não input de usuário) — inline como SQL
+// literal em vez de parâmetro bindado, porque a coluna "status" é um enum
+// nativo do Postgres e um parâmetro de texto bindado não faz cast implícito
+// para o tipo do enum (causa "operator does not exist: StatusAposta = text").
+const RESOLVIDOS = Prisma.raw(STATUS_RESOLVIDOS_PARA_STATS.map((s) => `'${s}'`).join(", "));
 
 export async function getAnalises() {
   const [porRisco, porRiscoGreenRed, porCasa, calibracaoRaw, mediaMensalRaw, sequenciaRows] = await Promise.all([

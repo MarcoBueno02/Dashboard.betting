@@ -39,7 +39,7 @@ export function NavLink({
   variant?: "sidebar" | "bottom";
 }) {
   const pathname = usePathname();
-  const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const active = pathname === href;
   const Icon = ICONS[icon];
 
   if (variant === "bottom") {
