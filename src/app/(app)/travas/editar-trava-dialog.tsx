@@ -63,7 +63,7 @@ export function EditarTravaDialog({
             <Label htmlFor={`teto-${trava.id}`}>Teto de risco</Label>
             <Select name="tetoRisco" defaultValue={trava.tetoRisco}>
               <SelectTrigger id={`teto-${trava.id}`} className="w-full">
-                <SelectValue />
+                <SelectValue>{(v: string) => RISCO_LABELS[v] ?? v}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(RISCO_LABELS).map(([value, label]) => (

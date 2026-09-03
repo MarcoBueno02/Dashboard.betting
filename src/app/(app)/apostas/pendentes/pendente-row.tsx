@@ -143,7 +143,7 @@ export function PendenteRow({
           <Label className="text-xs">Resultado</Label>
           <Select name="status" value={status} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-full">
-              <SelectValue />
+              <SelectValue>{(v: string) => STATUS_LABELS[v as StatusAposta] ?? v}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {RESOLVE_STATUSES.map((s) => (

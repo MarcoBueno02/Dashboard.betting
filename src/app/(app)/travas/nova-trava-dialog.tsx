@@ -86,7 +86,7 @@ export function NovaTravaDialog({
             <Label htmlFor="tetoRisco">Teto de risco</Label>
             <Select name="tetoRisco" defaultValue="MEDIO_ALTO">
               <SelectTrigger id="tetoRisco" className="w-full">
-                <SelectValue />
+                <SelectValue>{(v: string) => RISCO_LABELS[v] ?? v}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(RISCO_LABELS).map(([value, label]) => (

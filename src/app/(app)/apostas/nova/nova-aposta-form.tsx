@@ -84,6 +84,9 @@ export function NovaApostaForm({
 
   const agora = toInputDate(new Date());
 
+  const casaLabel: Record<string, string> = {};
+  casas.forEach((c) => (casaLabel[c.id] = `${c.nome} — ${formatBRL(c.saldoAtual)}`));
+
   function handleStatusChange(value: string | null) {
     if (!value) return;
     const s = value as StatusAposta;
@@ -156,7 +159,9 @@ export function NovaApostaForm({
         <Label htmlFor="casaId">Casa</Label>
         <Select name="casaId" required value={casaId} onValueChange={(v) => setCasaId(v ?? undefined)}>
           <SelectTrigger id="casaId" className="w-full">
-            <SelectValue placeholder="Selecione a casa" />
+            <SelectValue>
+              {(v: string | null) => (v ? (casaLabel[v] ?? v) : "Selecione a casa")}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {casas.map((c) => (
@@ -234,7 +239,9 @@ export function NovaApostaForm({
                 onValueChange={(v) => setCategoriaRisco(v ?? undefined)}
               >
                 <SelectTrigger id="categoriaRisco" className="w-full">
-                  <SelectValue placeholder="—" />
+                  <SelectValue>
+                    {(v: string | null) => (v ? (RISCO_LABELS[v] ?? v) : "—")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(RISCO_LABELS).map(([value, label]) => (
@@ -288,7 +295,7 @@ export function NovaApostaForm({
               <Label className="text-xs">Resultado</Label>
               <Select name="status" value={status} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue />
+                  <SelectValue>{(v: string) => STATUS_LABELS[v as StatusAposta] ?? v}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {STATUS_RESOLUCAO.map((s) => (

@@ -106,6 +106,9 @@ export function EditarApostaDialog({
   const riscoExcedeTravaAtual =
     travaDetectada && riscoExcedeTeto(categoriaRisco as CategoriaRisco, travaDetectada.tetoRisco);
 
+  const casaLabel: Record<string, string> = {};
+  casas.forEach((c) => (casaLabel[c.id] = c.nome));
+
   function handleStatusChange(value: string | null) {
     if (!value) return;
     const s = value as StatusAposta;
@@ -183,7 +186,9 @@ export function EditarApostaDialog({
             <Label htmlFor={`casa-${aposta.id}`}>Casa</Label>
             <Select name="casaId" defaultValue={aposta.casaId} required>
               <SelectTrigger id={`casa-${aposta.id}`} className="w-full">
-                <SelectValue placeholder="Selecione a casa" />
+                <SelectValue>
+                  {(v: string | null) => (v ? (casaLabel[v] ?? v) : "Selecione a casa")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {casas.map((c) => (
@@ -267,7 +272,9 @@ export function EditarApostaDialog({
                 onValueChange={(v) => setCategoriaRisco(v ?? undefined)}
               >
                 <SelectTrigger id={`risco-${aposta.id}`} className="w-full">
-                  <SelectValue placeholder="—" />
+                  <SelectValue>
+                    {(v: string | null) => (v ? (RISCO_LABELS[v] ?? v) : "—")}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(RISCO_LABELS).map(([value, label]) => (
@@ -311,7 +318,7 @@ export function EditarApostaDialog({
               <Label className="text-xs">Status</Label>
               <Select name="status" value={status} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue />
+                  <SelectValue>{(v: string) => STATUS_LABELS[v as StatusAposta] ?? v}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {TODOS_STATUS.map((s) => (
