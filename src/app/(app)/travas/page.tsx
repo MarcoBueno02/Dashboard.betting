@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { RiscoBadge } from "@/components/status-badge";
 import { formatDate } from "@/lib/format";
 import { NovaTravaDialog } from "./nova-trava-dialog";
-import { removerTravaAction } from "./actions";
+import { EditarTravaDialog } from "./editar-trava-dialog";
+import { removerTravaAction, reativarTravaAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -43,10 +44,18 @@ export default async function TravasPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             {ativas.map((t) => (
               <Card key={t.id}>
-                <CardHeader className="pb-2">
+                <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                   <CardTitle className="text-base">
                     {t.competicao?.nome ?? "Todas as competições"} · {t.mercado.nome}
                   </CardTitle>
+                  <EditarTravaDialog
+                    trava={{
+                      id: t.id,
+                      motivoAtivacao: t.motivoAtivacao,
+                      tetoRisco: t.tetoRisco,
+                      rodadasPositivasConsecutivas: t.rodadasPositivasConsecutivas,
+                    }}
+                  />
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
@@ -86,10 +95,18 @@ export default async function TravasPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             {removidas.map((t) => (
               <Card key={t.id} className="opacity-70">
-                <CardHeader className="pb-2">
+                <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
                   <CardTitle className="text-base">
                     {t.competicao?.nome ?? "Todas as competições"} · {t.mercado.nome}
                   </CardTitle>
+                  <EditarTravaDialog
+                    trava={{
+                      id: t.id,
+                      motivoAtivacao: t.motivoAtivacao,
+                      tetoRisco: t.tetoRisco,
+                      rodadasPositivasConsecutivas: t.rodadasPositivasConsecutivas,
+                    }}
+                  />
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <RiscoBadge risco={t.tetoRisco} />
@@ -97,6 +114,16 @@ export default async function TravasPage() {
                   <p className="text-xs text-muted-foreground">
                     {formatDate(t.dataAtivacao)} — {formatDate(t.dataRemocao)}
                   </p>
+                  <form
+                    action={async () => {
+                      "use server";
+                      await reativarTravaAction(t.id);
+                    }}
+                  >
+                    <Button size="sm" variant="outline" type="submit">
+                      Reativar trava
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             ))}

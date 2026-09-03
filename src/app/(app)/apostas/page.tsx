@@ -10,11 +10,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { TriangleAlert } from "lucide-react";
 import { formatBRL, formatDate } from "@/lib/format";
 import { StatusBadge, RiscoBadge } from "@/components/status-badge";
 import { ApostasFilters } from "./filters";
 import { SortHeader } from "./sort-header";
+import { EditarApostaDialog } from "./editar-aposta-dialog";
 import { buildApostaOrderBy, buildApostaWhere } from "@/lib/aposta-filters";
+import { riscoExcedeTeto } from "@/lib/betting";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +29,7 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
   const orderBy = buildApostaOrderBy(sp);
   const page = Math.max(1, Number(Array.isArray(sp.page) ? sp.page[0] : sp.page) || 1);
 
-  const [apostas, total, casas, competicoes, mercados] = await Promise.all([
+  const [apostas, total, casas, competicoes, mercados, travasAtivas] = await Promise.all([
     prisma.aposta.findMany({
       where,
       orderBy,
@@ -38,6 +41,10 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
     prisma.casa.findMany({ orderBy: { nome: "asc" } }),
     prisma.competicao.findMany({ orderBy: { nome: "asc" } }),
     prisma.mercado.findMany({ orderBy: { nome: "asc" } }),
+    prisma.trava.findMany({
+      where: { status: "ATIVA" },
+      select: { competicaoId: true, mercadoId: true, tetoRisco: true },
+    }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -91,13 +98,35 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
                 <TableHead className="text-right">
                   <SortHeader field="lucroPrejuizo" label="P/L" />
                 </TableHead>
+                <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
-              {apostas.map((a) => (
+              {apostas.map((a) => {
+                const alertaRisco =
+                  a.travaAtiva &&
+                  riscoExcedeTeto(
+                    a.categoriaRisco,
+                    travasAtivas.find(
+                      (t) =>
+                        t.mercadoId === a.mercadoId &&
+                        (t.competicaoId === null || t.competicaoId === a.competicaoId)
+                    )?.tetoRisco
+                  );
+                return (
                 <TableRow key={a.id}>
                   <TableCell className="whitespace-nowrap">{formatDate(a.data)}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">{a.jogoDescricao}</TableCell>
+                  <TableCell className="max-w-[200px] truncate">
+                    <span className="flex items-center gap-1.5">
+                      {alertaRisco ? (
+                        <TriangleAlert
+                          className="size-3.5 shrink-0 text-red-500"
+                          aria-label="Risco acima do teto da trava ativa"
+                        />
+                      ) : null}
+                      {a.jogoDescricao}
+                    </span>
+                  </TableCell>
                   <TableCell className="whitespace-nowrap">{a.competicao.nome}</TableCell>
                   <TableCell className="whitespace-nowrap">{a.mercado.nome}</TableCell>
                   <TableCell className="max-w-[160px] truncate">{a.entradaDescricao}</TableCell>
@@ -121,11 +150,38 @@ export default async function ApostasPage({ searchParams }: PageProps<"/apostas"
                   >
                     {a.lucroPrejuizo === null ? "—" : formatBRL(a.lucroPrejuizo)}
                   </TableCell>
+                  <TableCell>
+                    <EditarApostaDialog
+                      aposta={{
+                        id: a.id,
+                        data: a.data.toISOString(),
+                        competicaoId: a.competicaoId,
+                        jogoDescricao: a.jogoDescricao,
+                        mercadoId: a.mercadoId,
+                        entradaDescricao: a.entradaDescricao,
+                        casaId: a.casaId,
+                        odd: Number(a.odd),
+                        stake: Number(a.stake),
+                        pJusta: a.pJusta === null ? null : Number(a.pJusta),
+                        evPercentual: a.evPercentual === null ? null : Number(a.evPercentual),
+                        categoriaRisco: a.categoriaRisco,
+                        omaEfetiva: a.omaEfetiva === null ? null : Number(a.omaEfetiva),
+                        notas: a.notas,
+                        status: a.status,
+                        retornoReal: a.retornoReal === null ? null : Number(a.retornoReal),
+                      }}
+                      casas={casas.map((c) => ({ id: c.id, nome: c.nome }))}
+                      competicoes={competicoes.map((c) => ({ id: c.id, nome: c.nome }))}
+                      mercados={mercados.map((m) => ({ id: m.id, nome: m.nome }))}
+                      travasAtivas={travasAtivas}
+                    />
+                  </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
               {apostas.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={11} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={12} className="py-10 text-center text-muted-foreground">
                     Nenhuma aposta encontrada.
                   </TableCell>
                 </TableRow>

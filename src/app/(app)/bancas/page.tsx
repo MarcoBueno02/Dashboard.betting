@@ -15,18 +15,20 @@ export const dynamic = "force-dynamic";
 const SALDO_BAIXO_LIMIAR = 15;
 
 export default async function BancasPage() {
-  const casas = await prisma.casa.findMany({
-    orderBy: [{ ativa: "desc" }, { nome: "asc" }],
-  });
-
-  const snapshots = await prisma.saldoSnapshot.findMany({
-    include: { casa: { select: { nome: true } } },
-    orderBy: { data: "asc" },
-  });
+  const [casas, snapshots, ultimaUnidade] = await Promise.all([
+    prisma.casa.findMany({
+      orderBy: [{ ativa: "desc" }, { nome: "asc" }],
+    }),
+    prisma.saldoSnapshot.findMany({
+      include: { casa: { select: { nome: true } } },
+      orderBy: { data: "asc" },
+    }),
+    prisma.unidade.findFirst({ orderBy: { data: "desc" } }),
+  ]);
 
   const casasAtivas = casas.filter((c) => c.ativa);
   const bancaTotal = casasAtivas.reduce((acc, c) => acc + Number(c.saldoAtual), 0);
-  const unidade = unidadeSugerida(bancaTotal);
+  const unidade = ultimaUnidade ? Number(ultimaUnidade.valor) : unidadeSugerida(bancaTotal);
 
   const points: SnapshotPoint[] = snapshots.map((s) => ({
     data: s.data.toISOString().slice(0, 10),
@@ -49,7 +51,7 @@ export default async function BancasPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <StatCard label="Banca total (casas ativas)" value={formatBRL(bancaTotal)} />
-        <StatCard label="Unidade sugerida (2%)" value={formatBRL(unidade)} />
+        <StatCard label="Unidade atual (2% da banca)" value={formatBRL(unidade)} />
       </div>
 
       <Card>

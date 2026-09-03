@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,11 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { computeRetornoDefault, STATUS_LABELS } from "@/lib/betting";
+import { computeRetornoDefault, riscoExcedeTeto, STATUS_LABELS } from "@/lib/betting";
 import { formatBRL, formatDate } from "@/lib/format";
 import { RiscoBadge } from "@/components/status-badge";
 import { resolverApostaAction, type ActionState } from "../actions";
-import type { StatusAposta } from "@prisma/client";
+import { EditarApostaDialog } from "../editar-aposta-dialog";
+import type { ComboboxItem } from "@/components/combobox-creatable";
+import type { CategoriaRisco, StatusAposta } from "@prisma/client";
 
 const RESOLVE_STATUSES: StatusAposta[] = [
   "GREEN",
@@ -32,20 +35,35 @@ const initialState: ActionState = {};
 
 export function PendenteRow({
   aposta,
+  casas,
+  competicoes,
+  mercados,
+  travasAtivas,
 }: {
   aposta: {
     id: string;
     data: Date;
+    competicaoId: string;
     jogoDescricao: string;
+    mercadoId: string;
     entradaDescricao: string;
+    casaId: string;
     casaNome: string;
     competicaoNome: string;
     mercadoNome: string;
     odd: number;
     stake: number;
-    categoriaRisco: string | null;
+    pJusta: number | null;
+    evPercentual: number | null;
+    categoriaRisco: CategoriaRisco | null;
+    omaEfetiva: number | null;
+    notas: string | null;
     travaAtiva: boolean;
   };
+  casas: ComboboxItem[];
+  competicoes: ComboboxItem[];
+  mercados: ComboboxItem[];
+  travasAtivas: { competicaoId: string | null; mercadoId: string; tetoRisco: CategoriaRisco }[];
 }) {
   const [state, formAction, pending] = useActionState(resolverApostaAction, initialState);
   const [status, setStatus] = useState<StatusAposta>("GREEN");
@@ -73,6 +91,11 @@ export function PendenteRow({
 
   if (state.success) return null;
 
+  const trava = travasAtivas.find(
+    (t) => t.mercadoId === aposta.mercadoId && (t.competicaoId === null || t.competicaoId === aposta.competicaoId)
+  );
+  const alertaRisco = aposta.travaAtiva && riscoExcedeTeto(aposta.categoriaRisco, trava?.tetoRisco);
+
   return (
     <div className="space-y-3 rounded-lg border p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -85,14 +108,32 @@ export function PendenteRow({
             {formatDate(aposta.data)} · {aposta.casaNome} · Odd {aposta.odd.toFixed(2)} · Stake{" "}
             {formatBRL(aposta.stake)}
           </p>
+          {alertaRisco ? (
+            <p className="mt-1 flex items-center gap-1.5 text-xs text-red-500">
+              <TriangleAlert className="size-3.5 shrink-0" />
+              Risco {aposta.categoriaRisco} acima do teto da trava ativa ({trava?.tetoRisco}).
+            </p>
+          ) : null}
         </div>
         <div className="flex items-center gap-2">
-          <RiscoBadge risco={aposta.categoriaRisco as never} />
+          <RiscoBadge risco={aposta.categoriaRisco} />
           {aposta.travaAtiva ? (
             <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-500">
               Trava
             </span>
           ) : null}
+          <EditarApostaDialog
+            aposta={{
+              ...aposta,
+              data: aposta.data.toISOString(),
+              status: "PENDENTE",
+              retornoReal: null,
+            }}
+            casas={casas}
+            competicoes={competicoes}
+            mercados={mercados}
+            travasAtivas={travasAtivas}
+          />
         </div>
       </div>
 

@@ -27,7 +27,7 @@ export default async function NovaApostaPage() {
         <p className="text-sm text-muted-foreground">Registro rápido de entrada</p>
       </div>
       <NovaApostaForm
-        casas={casas.map((c) => ({ id: c.id, nome: c.nome }))}
+        casas={casas.map((c) => ({ id: c.id, nome: c.nome, saldoAtual: Number(c.saldoAtual) }))}
         competicoes={competicoes.map((c) => ({ id: c.id, nome: c.nome }))}
         mercados={mercados.map((m) => ({ id: m.id, nome: m.nome }))}
         travasAtivas={travasAtivas}

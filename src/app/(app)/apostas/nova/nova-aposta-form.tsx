@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -19,10 +20,13 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ComboboxCreatable, type ComboboxItem } from "@/components/combobox-creatable";
 import { createCompeticaoAction, createMercadoAction } from "@/lib/catalog-actions";
 import { createApostaAction, type ActionState } from "../actions";
-import { RISCO_LABELS } from "@/lib/betting";
-import { toInputDate } from "@/lib/format";
+import { RISCO_LABELS, STATUS_LABELS, computeRetornoDefault, riscoExcedeTeto } from "@/lib/betting";
+import { formatBRL, toInputDate } from "@/lib/format";
+import type { CategoriaRisco, StatusAposta } from "@prisma/client";
 
 const initialState: ActionState = {};
+
+const STATUS_RESOLUCAO: StatusAposta[] = ["GREEN", "RED", "MEIA_GREEN", "MEIA_RED", "REEMBOLSO", "CANCELADA"];
 
 export function NovaApostaForm({
   casas,
@@ -31,17 +35,25 @@ export function NovaApostaForm({
   travasAtivas,
   jogosRecentes,
 }: {
-  casas: ComboboxItem[];
+  casas: (ComboboxItem & { saldoAtual: number })[];
   competicoes: ComboboxItem[];
   mercados: ComboboxItem[];
-  travasAtivas: { competicaoId: string | null; mercadoId: string; tetoRisco: string }[];
+  travasAtivas: { competicaoId: string | null; mercadoId: string; tetoRisco: CategoriaRisco }[];
   jogosRecentes: string[];
 }) {
   const router = useRouter();
   const [state, formAction, pending] = useActionState(createApostaAction, initialState);
   const [competicaoId, setCompeticaoId] = useState<string | undefined>();
   const [mercadoId, setMercadoId] = useState<string | undefined>();
+  const [casaId, setCasaId] = useState<string | undefined>();
   const [avancado, setAvancado] = useState(false);
+  const [categoriaRisco, setCategoriaRisco] = useState<string | undefined>();
+  const [odd, setOdd] = useState<number>(0);
+  const [stake, setStake] = useState<number>(0);
+  const [jaResolvida, setJaResolvida] = useState(false);
+  const [status, setStatus] = useState<StatusAposta>("GREEN");
+  const [retorno, setRetorno] = useState<number>(0);
+  const [atualizarSaldo, setAtualizarSaldo] = useState(true);
   const [formKey, setFormKey] = useState(0);
 
   useEffect(() => {
@@ -50,6 +62,9 @@ export function NovaApostaForm({
       setFormKey((k) => k + 1);
       setCompeticaoId(undefined);
       setMercadoId(undefined);
+      setCasaId(undefined);
+      setCategoriaRisco(undefined);
+      setJaResolvida(false);
       router.refresh();
     }
   }, [state.success, router]);
@@ -61,7 +76,20 @@ export function NovaApostaForm({
     );
   }, [travasAtivas, mercadoId, competicaoId]);
 
+  const riscoExcedeTravaAtual =
+    travaDetectada && riscoExcedeTeto(categoriaRisco as CategoriaRisco, travaDetectada.tetoRisco);
+
+  const casaSelecionada = casas.find((c) => c.id === casaId);
+  const stakeExcedeSaldo = casaSelecionada && stake > 0 && stake > casaSelecionada.saldoAtual;
+
   const agora = toInputDate(new Date());
+
+  function handleStatusChange(value: string | null) {
+    if (!value) return;
+    const s = value as StatusAposta;
+    setStatus(s);
+    setRetorno(computeRetornoDefault(s, stake || 0, odd || 0) ?? 0);
+  }
 
   return (
     <form key={formKey} action={formAction} className="max-w-xl space-y-5">
@@ -126,28 +154,51 @@ export function NovaApostaForm({
 
       <div className="space-y-2">
         <Label htmlFor="casaId">Casa</Label>
-        <Select name="casaId" required>
+        <Select name="casaId" required value={casaId} onValueChange={(v) => setCasaId(v ?? undefined)}>
           <SelectTrigger id="casaId" className="w-full">
             <SelectValue placeholder="Selecione a casa" />
           </SelectTrigger>
           <SelectContent>
             {casas.map((c) => (
               <SelectItem key={c.id} value={c.id}>
-                {c.nome}
+                {c.nome} — {formatBRL(c.saldoAtual)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+        {stakeExcedeSaldo ? (
+          <p className="flex items-center gap-1.5 text-xs text-amber-500">
+            <TriangleAlert className="size-3.5 shrink-0" />
+            Stake maior que o saldo atual de {casaSelecionada?.nome} (
+            {formatBRL(casaSelecionada?.saldoAtual ?? 0)}).
+          </p>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="odd">Odd</Label>
-          <Input id="odd" name="odd" type="number" step="0.001" min="1.001" required />
+          <Input
+            id="odd"
+            name="odd"
+            type="number"
+            step="0.001"
+            min="1.001"
+            required
+            onChange={(e) => setOdd(Number(e.target.value))}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="stake">Stake (R$)</Label>
-          <Input id="stake" name="stake" type="number" step="0.01" min="0.01" required />
+          <Input
+            id="stake"
+            name="stake"
+            type="number"
+            step="0.01"
+            min="0.01"
+            required
+            onChange={(e) => setStake(Number(e.target.value))}
+          />
         </div>
       </div>
 
@@ -177,7 +228,11 @@ export function NovaApostaForm({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="categoriaRisco">Categoria de risco</Label>
-              <Select name="categoriaRisco">
+              <Select
+                name="categoriaRisco"
+                value={categoriaRisco}
+                onValueChange={(v) => setCategoriaRisco(v ?? undefined)}
+              >
                 <SelectTrigger id="categoriaRisco" className="w-full">
                   <SelectValue placeholder="—" />
                 </SelectTrigger>
@@ -189,6 +244,13 @@ export function NovaApostaForm({
                   ))}
                 </SelectContent>
               </Select>
+              {riscoExcedeTravaAtual ? (
+                <p className="flex items-center gap-1.5 text-xs text-red-500">
+                  <TriangleAlert className="size-3.5 shrink-0" />
+                  Risco acima do teto da trava ativa (
+                  {RISCO_LABELS[travaDetectada!.tetoRisco]}).
+                </p>
+              ) : null}
             </div>
             <div className="space-y-2">
               <Label htmlFor="omaEfetiva">OMA efetiva</Label>
@@ -203,10 +265,70 @@ export function NovaApostaForm({
         <Textarea id="notas" name="notas" rows={2} placeholder="Opcional" />
       </div>
 
+      <div className="space-y-3 rounded-md border p-3">
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="jaResolvida"
+            name="jaResolvida"
+            checked={jaResolvida}
+            onCheckedChange={(v) => {
+              const checked = v === true;
+              setJaResolvida(checked);
+              if (checked) setRetorno(computeRetornoDefault(status, stake || 0, odd || 0) ?? 0);
+            }}
+          />
+          <Label htmlFor="jaResolvida" className="font-normal">
+            Já tenho o resultado (registrar direto como resolvida)
+          </Label>
+        </div>
+
+        {jaResolvida ? (
+          <div className="flex flex-wrap items-end gap-3 pt-1">
+            <div className="w-40 space-y-1">
+              <Label className="text-xs">Resultado</Label>
+              <Select name="status" value={status} onValueChange={handleStatusChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {STATUS_RESOLUCAO.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {STATUS_LABELS[s]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-32 space-y-1">
+              <Label className="text-xs">Retorno (R$)</Label>
+              <Input
+                name="retornoReal"
+                type="number"
+                step="0.01"
+                min="0"
+                value={retorno}
+                onChange={(e) => setRetorno(Number(e.target.value))}
+              />
+            </div>
+            <div className="flex items-center gap-2 pb-2">
+              <Checkbox
+                id="atualizarSaldo"
+                name="atualizarSaldo"
+                checked={atualizarSaldo}
+                onCheckedChange={(v) => setAtualizarSaldo(v === true)}
+              />
+              <Label htmlFor="atualizarSaldo" className="text-xs font-normal">
+                Atualizar saldo da casa
+              </Label>
+            </div>
+          </div>
+        ) : null}
+      </div>
+
       {state.error ? <p className="text-sm text-destructive">{state.error}</p> : null}
 
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Salvando..." : "Registrar aposta"}
+        {pending ? "Salvando..." : jaResolvida ? "Registrar aposta resolvida" : "Registrar aposta"}
       </Button>
     </form>
   );

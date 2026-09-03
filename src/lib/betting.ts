@@ -1,4 +1,4 @@
-import { StatusAposta } from "@prisma/client";
+import { StatusAposta, CategoriaRisco } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 
 type Dec = Prisma.Decimal | number | string;
@@ -139,4 +139,26 @@ export function maioresSequencias(apostasOrdenadasAsc: { status: StatusAposta }[
 
 export function unidadeSugerida(bancaTotal: Dec, percentual = 0.02) {
   return round2(n(bancaTotal) * percentual);
+}
+
+/**
+ * Ordem crescente de agressividade de risco. Usada para comparar a
+ * categoria de risco de uma aposta contra o teto imposto por uma trava.
+ */
+export const RISCO_ORDEM: CategoriaRisco[] = [
+  "BAIXO",
+  "MEDIO",
+  "MEDIO_ALTO",
+  "ALTO_ESPECULATIVO",
+];
+
+/**
+ * true quando o risco da aposta é mais agressivo que o teto permitido pela trava.
+ */
+export function riscoExcedeTeto(
+  risco: CategoriaRisco | null | undefined,
+  teto: CategoriaRisco | null | undefined
+): boolean {
+  if (!risco || !teto) return false;
+  return RISCO_ORDEM.indexOf(risco) > RISCO_ORDEM.indexOf(teto);
 }

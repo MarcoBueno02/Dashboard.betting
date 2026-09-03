@@ -7,19 +7,25 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { StatusBadge } from "@/components/status-badge";
 import { EvolucaoChart, type SnapshotPoint } from "@/components/evolucao-chart";
 import { formatBRL, formatDate, formatPercent } from "@/lib/format";
-import { currentStreak, roi, unidadeSugerida, winRate } from "@/lib/betting";
+import { currentStreak, round2, STATUS_RESOLVIDOS_PARA_STATS, unidadeSugerida } from "@/lib/betting";
 import { bancaTotalEmData } from "@/lib/banca";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [casasAtivas, snapshots, apostasResolvidas, pendentesCount, ultimasApostas] =
+  const [casasAtivas, snapshots, porStatus, streakRows, pendentesCount, ultimasApostas, ultimaUnidade] =
     await Promise.all([
       prisma.casa.findMany({ where: { ativa: true } }),
       prisma.saldoSnapshot.findMany({ orderBy: { data: "asc" }, include: { casa: { select: { nome: true } } } }),
-      prisma.aposta.findMany({
+      prisma.aposta.groupBy({
+        by: ["status"],
         where: { status: { not: "PENDENTE" } },
-        select: { status: true, stake: true, lucroPrejuizo: true, data: true },
+        _sum: { stake: true, lucroPrejuizo: true },
+        _count: true,
+      }),
+      prisma.aposta.findMany({
+        where: { status: { in: ["GREEN", "RED"] } },
+        select: { status: true },
         orderBy: { data: "desc" },
       }),
       prisma.aposta.count({ where: { status: "PENDENTE" } }),
@@ -28,6 +34,7 @@ export default async function DashboardPage() {
         take: 10,
         include: { casa: true, competicao: true, mercado: true },
       }),
+      prisma.unidade.findFirst({ orderBy: { data: "desc" } }),
     ]);
 
   const bancaTotal = casasAtivas.reduce((acc, c) => acc + Number(c.saldoAtual), 0);
@@ -45,10 +52,18 @@ export default async function DashboardPage() {
 
   const variacao = (base: number) => (base > 0 ? ((bancaTotal - base) / base) * 100 : 0);
 
-  const unidade = unidadeSugerida(bancaTotal);
-  const roiGeral = roi(apostasResolvidas);
-  const winRateGeral = winRate(apostasResolvidas);
-  const streak = currentStreak(apostasResolvidas);
+  const unidade = ultimaUnidade ? Number(ultimaUnidade.valor) : unidadeSugerida(bancaTotal);
+
+  const resolvidos = porStatus.filter((g) => STATUS_RESOLVIDOS_PARA_STATS.includes(g.status));
+  const stakeTotal = resolvidos.reduce((acc, g) => acc + Number(g._sum.stake ?? 0), 0);
+  const lucroGeral = resolvidos.reduce((acc, g) => acc + Number(g._sum.lucroPrejuizo ?? 0), 0);
+  const totalResolvidos = resolvidos.reduce((acc, g) => acc + g._count, 0);
+  const greens =
+    (porStatus.find((g) => g.status === "GREEN")?._count ?? 0) +
+    (porStatus.find((g) => g.status === "MEIA_GREEN")?._count ?? 0);
+  const roiGeral = stakeTotal > 0 ? round2((lucroGeral / stakeTotal) * 100) : 0;
+  const winRateGeral = totalResolvidos > 0 ? round2((greens / totalResolvidos) * 100) : 0;
+  const streak = currentStreak(streakRows);
 
   const points: SnapshotPoint[] = snapshots.map((s) => ({
     data: s.data.toISOString().slice(0, 10),

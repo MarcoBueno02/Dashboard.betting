@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { registrarNovaUnidade } from "@/lib/unidade";
 
 export type ActionState = { error?: string; success?: boolean };
 
@@ -29,17 +30,20 @@ export async function createCasaAction(
     return { error: "Já existe uma casa com esse nome." };
   }
 
-  await prisma.casa.create({
-    data: {
-      nome: parsed.data.nome,
-      saldoAtual: parsed.data.saldoAtual,
-      snapshots: {
-        create: {
-          saldo: parsed.data.saldoAtual,
-          origem: "CONFIRMACAO_MANUAL",
+  await prisma.$transaction(async (tx) => {
+    await tx.casa.create({
+      data: {
+        nome: parsed.data.nome,
+        saldoAtual: parsed.data.saldoAtual,
+        snapshots: {
+          create: {
+            saldo: parsed.data.saldoAtual,
+            origem: "CONFIRMACAO_MANUAL",
+          },
         },
       },
-    },
+    });
+    await registrarNovaUnidade(tx);
   });
 
   revalidatePath("/bancas");
@@ -65,19 +69,20 @@ export async function updateSaldoAction(
     return { error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
   }
 
-  await prisma.$transaction([
-    prisma.casa.update({
+  await prisma.$transaction(async (tx) => {
+    await tx.casa.update({
       where: { id: parsed.data.casaId },
       data: { saldoAtual: parsed.data.saldo },
-    }),
-    prisma.saldoSnapshot.create({
+    });
+    await tx.saldoSnapshot.create({
       data: {
         casaId: parsed.data.casaId,
         saldo: parsed.data.saldo,
         origem: "CONFIRMACAO_MANUAL",
       },
-    }),
-  ]);
+    });
+    await registrarNovaUnidade(tx);
+  });
 
   revalidatePath("/bancas");
   revalidatePath("/");

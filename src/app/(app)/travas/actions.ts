@@ -53,3 +53,48 @@ export async function removerTravaAction(travaId: string) {
   revalidatePath("/travas");
   revalidatePath("/apostas/nova");
 }
+
+export async function reativarTravaAction(travaId: string) {
+  await prisma.trava.update({
+    where: { id: travaId },
+    data: { status: "ATIVA", dataRemocao: null },
+  });
+  revalidatePath("/travas");
+  revalidatePath("/apostas/nova");
+}
+
+const editarTravaSchema = z.object({
+  travaId: z.string().min(1),
+  motivoAtivacao: z.string().trim().min(1, "Informe o motivo"),
+  tetoRisco: z.enum(categoriaRiscoValues),
+  rodadasPositivasConsecutivas: z.coerce.number().int().min(0).max(3),
+});
+
+export async function editarTravaAction(
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const parsed = editarTravaSchema.safeParse({
+    travaId: formData.get("travaId"),
+    motivoAtivacao: formData.get("motivoAtivacao"),
+    tetoRisco: formData.get("tetoRisco"),
+    rodadasPositivasConsecutivas: formData.get("rodadasPositivasConsecutivas"),
+  });
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  }
+
+  await prisma.trava.update({
+    where: { id: parsed.data.travaId },
+    data: {
+      motivoAtivacao: parsed.data.motivoAtivacao,
+      tetoRisco: parsed.data.tetoRisco,
+      rodadasPositivasConsecutivas: parsed.data.rodadasPositivasConsecutivas,
+    },
+  });
+
+  revalidatePath("/travas");
+  revalidatePath("/apostas/nova");
+  return { success: true };
+}
