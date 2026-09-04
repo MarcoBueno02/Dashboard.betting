@@ -19,6 +19,20 @@ function isTokenApiRoute(pathname: string) {
   return false;
 }
 
+// Servidor MCP (Fase 2) — OAuth 2.1 próprio (ver src/lib/mcp-oauth.ts) e o
+// endpoint MCP em si (Bearer token), nenhum dos dois usa a sessão por
+// cookie do site. Os .well-known precisam ficar acessíveis sem QUALQUER
+// autenticação (é a própria descoberta OAuth que os exige assim).
+function isMcpRoute(pathname: string) {
+  if (pathname === "/mcp") return true;
+  if (pathname === "/authorize") return true;
+  if (pathname === "/token") return true;
+  if (pathname === "/.well-known/oauth-protected-resource") return true;
+  if (pathname === "/.well-known/oauth-protected-resource/mcp") return true;
+  if (pathname === "/.well-known/oauth-authorization-server") return true;
+  return false;
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -26,7 +40,8 @@ export async function proxy(request: NextRequest) {
     pathname === "/login" ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
-    isTokenApiRoute(pathname)
+    isTokenApiRoute(pathname) ||
+    isMcpRoute(pathname)
   ) {
     return NextResponse.next();
   }

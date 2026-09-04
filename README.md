@@ -54,6 +54,10 @@ Acesse `http://localhost:3000` e entre com a senha definida em `APP_PASSWORD`.
 | `DATABASE_URL` | Connection string do Postgres                            |
 | `APP_PASSWORD` | Senha única para acessar o dashboard (sessão por cookie) |
 | `API_TOKEN`    | Token da API de automação (`Authorization: Bearer`), separado do login. Gere um novo com `openssl rand -hex 32`. |
+| `MCP_CLIENT_ID` | Identificador do cliente OAuth pré-registrado do servidor MCP (Fase 2) — um nome fixo, não precisa ser secreto. |
+| `MCP_CLIENT_SECRET` | Segredo do cliente OAuth do servidor MCP. Gere com `openssl rand -hex 32`. |
+| `MCP_OAUTH_SECRET` | Chave de assinatura dos tokens de acesso/refresh emitidos pelo servidor MCP. Gere com `openssl rand -hex 32`. |
+| `MCP_REDIRECT_URI` | Redirect URI aceito pelo `/authorize` do servidor MCP. Para o conector do Claude.ai: `https://claude.ai/api/mcp/auth_callback`. |
 
 ## Estrutura
 
@@ -215,14 +219,112 @@ Todas as rotas acima foram testadas manualmente contra um banco Postgres real
 (local) antes de subir — incluindo os casos de erro (token ausente/errado,
 campo obrigatório faltando, tentativa de sobrescrever resultado sem `forcar`).
 
-### Fase 2 (servidor MCP) — não implementada nesta etapa
+## Servidor MCP (Fase 2)
 
-O prompt original também pedia, como próximo passo opcional, um servidor MCP
-expondo essas operações como ferramentas. Não construí isso agora: expor um
-transporte MCP correto (schemas de ferramenta, autenticação interna contra o
-`API_TOKEN`, transporte HTTP) é um subsistema à parte, e testá-lo de verdade
-exige um cliente MCP real conversando com ele — algo que não dá pra validar
-com confiança no mesmo nível que os testes de `curl` acima. Prefiro entregar
-a Fase 1 já testada contra o banco real a entregar as duas fases com a
-segunda sem verificação de ponta a ponta. Avise quando quiser que eu monte a
-Fase 2 em cima dessa API.
+Servidor MCP remoto em `/mcp`, protegido por OAuth 2.1 com PKCE (S256
+obrigatório) e um único cliente pré-registrado — não DCR, não CIMD. Cada
+ferramenta é um wrapper fino em cima da API REST da Fase 1
+(`src/lib/mcp-tools.ts`); a lógica de negócio inteira vive só na API, o MCP
+só chama.
+
+### Por que pré-registrado em vez de DCR
+
+O prompt original pedia DCR (Dynamic Client Registration) como o caminho
+"mais robusto". Fui checar a documentação atual antes de implementar, como
+pedido, e o que valia quando o prompt foi escrito mudou:
+
+- A especificação MCP (revisão `2026-07-28`) **depreciou DCR**. A ordem de
+  prioridade atual pra registro de cliente é: credenciais pré-registradas →
+  Client ID Metadata Documents (CIMD) → DCR só por compatibilidade
+  ([Client Registration](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration)).
+- A documentação da própria Anthropic pra conectores customizados
+  (`claude.com/docs/connectors/building/authentication`) recomenda
+  explicitamente: *"Supplying your own pre-registered client ID (and
+  secret...) as static client credentials is a good option [...]: it avoids
+  dynamic client registration entirely"* — exatamente pra esse cenário (um
+  conector customizado, de uma organização só, não listado num diretório
+  público). CIMD faz sentido quando servidor e cliente não se conhecem de
+  antemão; aqui eles se conhecem — sou eu configurando os dois lados.
+- Isso também elimina toda uma classe de risco: sem endpoint `/register`
+  (superfície de DCR) e sem precisar buscar/validar documentos JSON de URLs
+  arbitrárias (superfície de SSRF do CIMD).
+
+Então: sem DCR, sem CIMD. `MCP_CLIENT_ID`/`MCP_CLIENT_SECRET` são colados
+nos campos "OAuth Client ID" e "OAuth Client Secret" do "Advanced settings"
+ao adicionar o conector — é o próprio caminho oficial que o Claude.ai expõe
+pra isso.
+
+### Arquitetura
+
+- `/.well-known/oauth-protected-resource` (+ variante `/mcp`) e
+  `/.well-known/oauth-authorization-server` — metadados de descoberta
+  (RFC 9728 / RFC 8414), servidos via `rewrites()` no `next.config.ts` a
+  partir de `src/app/api/oauth/*` (Next.js não trata pastas `.` como rota
+  literal de forma documentada, então evitei depender disso).
+- `/authorize` — tela de login (senha = `APP_PASSWORD`, a mesma do
+  dashboard) com rate limit por IP (mesmo padrão do login do site: 5
+  tentativas / 15 min, em memória). Valida `client_id` e `redirect_uri`
+  contra os valores configurados **antes** de considerar qualquer redirect
+  (evita open redirect); código de autorização de uso único, TTL de 60s,
+  guardado em `McpAuthorizationCode` (única tabela nova no schema).
+- `/token` — troca o código por tokens (`authorization_code`) e renova
+  (`refresh_token`), aceita `client_secret_post` e `client_secret_basic`,
+  content-type `application/x-www-form-urlencoded` (exigido pela Anthropic,
+  diferente do `/register` que seria JSON). Tokens de acesso e refresh são
+  JWTs HS256 autocontidos (`src/lib/mcp-oauth.ts`, assinados com
+  `MCP_OAUTH_SECRET`) — sem tabela própria, verificados só por assinatura +
+  `iss`/`aud`/`exp`. Refresh token rotaciona a cada uso.
+- `/mcp` — endpoint MCP em si (`@modelcontextprotocol/sdk`, transporte
+  `WebStandardStreamableHTTPServerTransport`, modo stateless). Valida o
+  Bearer token **antes** de repassar pro SDK: sem token válido, responde
+  `401` com `WWW-Authenticate: Bearer error="invalid_token",
+  resource_metadata="..."` — é esse detalhe (401 de transporte, não um erro
+  de ferramenta 200 com `isError:true`) que faz o Claude mostrar o cartão de
+  "Connect" em vez de só devolver o erro pro modelo.
+- `src/proxy.ts` — essas rotas (mais os `.well-known`) ficam de fora do
+  redirect pra `/login` que protege o resto do site; cada uma implementa a
+  própria autenticação.
+
+### Ferramentas expostas
+
+`consultar_bancas`, `atualizar_saldo_casa`, `criar_casa`, `criar_aposta`,
+`listar_apostas_pendentes`, `buscar_apostas`, `listar_apostas`,
+`atualizar_resultado_aposta`, `consultar_segmentado`, `listar_travas`,
+`criar_trava`, `atualizar_trava` — uma pra cada rota principal da API da
+Fase 1, com descrição em português pra cada uma.
+
+### Testado
+
+Simulei o fluxo OAuth completo com PKCE via script (não dá pra testar DCR
+porque não o implementamos, e não dá pra dirigir o Claude.ai a partir daqui
+— mas todo o resto é exatamente o que o Claude faria):
+
+- Descoberta: os três documentos de metadados, formato e conteúdo corretos.
+- `/authorize`: renderiza o formulário, recusa `client_id`/`redirect_uri`
+  errados sem redirecionar (400 direto), recusa senha errada sem
+  redirecionar, aceita senha certa e redireciona (**303**, não o 307 padrão
+  do Next — importante: 307 preservaria o método POST no redirect pro
+  callback do Claude, quebrando o fluxo) com `code` e `state`.
+- `/token`: troca o código por tokens, recusa reuso do mesmo código
+  (`invalid_grant`), recusa `client_secret` errado (`invalid_client`),
+  aceita tanto `client_secret_post` quanto `client_secret_basic`, renova
+  com `refresh_token` e rotaciona o refresh token a cada renovação.
+- `/mcp`: `401` com `WWW-Authenticate` sem token; `initialize` e
+  `tools/list` (as 12 ferramentas aparecem) com token válido; `tools/call`
+  de leitura (`consultar_bancas`) e de escrita (`criar_casa`) chegando de
+  verdade no Postgres via API_TOKEN.
+
+### Como conectar (passo a passo)
+
+1. No Vercel, confirme que `MCP_CLIENT_ID`, `MCP_CLIENT_SECRET`,
+   `MCP_OAUTH_SECRET` e `MCP_REDIRECT_URI` estão configuradas (Production) e
+   redeploy.
+2. No Claude.ai: **Customize → Connectors → Add custom connector**.
+3. URL do servidor: `https://dashboardbetting.vercel.app/mcp`.
+4. Em **Advanced settings**, cole o `MCP_CLIENT_ID` em "OAuth Client ID" e o
+   `MCP_CLIENT_SECRET` em "OAuth Client Secret".
+5. Ao conectar, uma janela abre em `.../authorize` pedindo a senha — é a
+   mesma `APP_PASSWORD` do login do dashboard. Depois de autorizar, o
+   Claude volta com um token e a conexão fica pronta.
+6. Peça pro Claude listar as apostas pendentes ou consultar as bancas pra
+   confirmar que as ferramentas respondem.

@@ -138,3 +138,20 @@ model Unidade {
 
   @@index([data])
 }
+
+// Autorização OAuth do servidor MCP (Fase 2). Só o código de autorização
+// precisa de estado no banco — ele tem que ser de uso único mesmo dentro da
+// sua própria janela de validade (curta, ~60s). Os tokens de acesso e
+// refresh em si são JWTs autocontidos (assinados com MCP_OAUTH_SECRET) e não
+// passam por aqui.
+model McpAuthorizationCode {
+  code          String    @id
+  codeChallenge String
+  redirectUri   String
+  clientId      String
+  expiresAt     DateTime
+  usedAt        DateTime?
+  criadaEm      DateTime  @default(now())
+
+  @@index([expiresAt])
+}
