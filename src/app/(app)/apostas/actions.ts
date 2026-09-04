@@ -5,46 +5,13 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { computeLucro, parseDataInputBRT } from "@/lib/betting";
 import { registrarNovaUnidade } from "@/lib/unidade";
-import { CategoriaRisco, Prisma, StatusAposta } from "@prisma/client";
+import { ajustarContadorTrava, isTravaAtiva } from "@/lib/trava";
+import { CategoriaRisco, StatusAposta } from "@prisma/client";
 
 export type ActionState = { error?: string; success?: boolean };
 
 const categoriaRiscoValues = ["BAIXO", "MEDIO", "MEDIO_ALTO", "ALTO_ESPECULATIVO"] as const;
 const statusResolvidoValues = ["GREEN", "RED", "REEMBOLSO", "MEIA_GREEN", "MEIA_RED", "CANCELADA"] as const;
-
-async function isTravaAtiva(competicaoId: string, mercadoId: string) {
-  const trava = await prisma.trava.findFirst({
-    where: {
-      status: "ATIVA",
-      mercadoId,
-      OR: [{ competicaoId }, { competicaoId: null }],
-    },
-  });
-  return Boolean(trava);
-}
-
-async function ajustarContadorTrava(
-  tx: Prisma.TransactionClient,
-  competicaoId: string,
-  mercadoId: string,
-  status: StatusAposta
-) {
-  if (status !== "GREEN" && status !== "RED") return;
-  const trava = await tx.trava.findFirst({
-    where: {
-      status: "ATIVA",
-      mercadoId,
-      OR: [{ competicaoId }, { competicaoId: null }],
-    },
-  });
-  if (!trava) return;
-  await tx.trava.update({
-    where: { id: trava.id },
-    data: {
-      rodadasPositivasConsecutivas: status === "GREEN" ? trava.rodadasPositivasConsecutivas + 1 : 0,
-    },
-  });
-}
 
 function revalidarTudo() {
   revalidatePath("/apostas");
@@ -102,7 +69,7 @@ export async function createApostaAction(
   }
 
   const d = parsed.data;
-  const travaAtiva = await isTravaAtiva(d.competicaoId, d.mercadoId);
+  const travaAtiva = await isTravaAtiva(prisma, d.competicaoId, d.mercadoId);
 
   const resolvida = d.jaResolvida && d.status;
   const status: StatusAposta = resolvida ? (d.status as StatusAposta) : "PENDENTE";
@@ -256,7 +223,7 @@ export async function atualizarApostaAction(
   const resolvida = status !== "PENDENTE";
   const retornoReal = resolvida ? (d.retornoReal ?? 0) : null;
   const lucroPrejuizo = resolvida ? computeLucro(retornoReal, d.stake) : null;
-  const travaAtiva = await isTravaAtiva(d.competicaoId, d.mercadoId);
+  const travaAtiva = await isTravaAtiva(prisma, d.competicaoId, d.mercadoId);
 
   await prisma.aposta.update({
     where: { id: d.apostaId },
