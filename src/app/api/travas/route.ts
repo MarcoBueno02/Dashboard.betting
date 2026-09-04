@@ -52,22 +52,27 @@ export async function POST(request: NextRequest) {
   }
   const d = parsed.data;
 
-  const trava = await prisma.$transaction(async (tx) => {
-    const mercado = await upsertMercado(d.mercado, tx);
-    const competicao = d.competicao ? await upsertCompeticao(d.competicao, tx) : null;
+  let trava;
+  try {
+    trava = await prisma.$transaction(async (tx) => {
+      const mercado = await upsertMercado(d.mercado, tx);
+      const competicao = d.competicao ? await upsertCompeticao(d.competicao, tx) : null;
 
-    return tx.trava.create({
-      data: {
-        competicaoId: competicao?.id ?? null,
-        mercadoId: mercado.id,
-        tetoRisco: d.tetoRisco,
-        motivoAtivacao: d.motivoAtivacao,
-        status: "ATIVA",
-        ...(d.dataAtivacao ? { dataAtivacao: parseDataOnlyBRT(d.dataAtivacao) } : {}),
-      },
-      include: INCLUDE,
+      return tx.trava.create({
+        data: {
+          competicaoId: competicao?.id ?? null,
+          mercadoId: mercado.id,
+          tetoRisco: d.tetoRisco,
+          motivoAtivacao: d.motivoAtivacao,
+          status: "ATIVA",
+          ...(d.dataAtivacao ? { dataAtivacao: parseDataOnlyBRT(d.dataAtivacao) } : {}),
+        },
+        include: INCLUDE,
+      });
     });
-  });
+  } catch (err) {
+    return apiError(500, err instanceof Error ? err.message : "Erro ao criar trava");
+  }
 
   return NextResponse.json({ trava: serializeTrava(trava) }, { status: 201 });
 }

@@ -37,13 +37,17 @@ export async function POST(
   const saldoAnterior = Number(casa.saldoAtual);
   const saldoNovo = round2(parsed.data.saldo);
 
-  await prisma.$transaction(async (tx) => {
-    await tx.casa.update({ where: { id: casa.id }, data: { saldoAtual: saldoNovo } });
-    await tx.saldoSnapshot.create({
-      data: { casaId: casa.id, saldo: saldoNovo, origem: "CONFIRMACAO_MANUAL" },
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.casa.update({ where: { id: casa.id }, data: { saldoAtual: saldoNovo } });
+      await tx.saldoSnapshot.create({
+        data: { casaId: casa.id, saldo: saldoNovo, origem: "CONFIRMACAO_MANUAL" },
+      });
+      await registrarNovaUnidade(tx);
     });
-    await registrarNovaUnidade(tx);
-  });
+  } catch (err) {
+    return apiError(500, err instanceof Error ? err.message : "Erro ao atualizar saldo");
+  }
 
   return NextResponse.json({
     casa: casa.nome,

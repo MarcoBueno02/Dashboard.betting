@@ -61,39 +61,52 @@ export async function POST(request: NextRequest) {
     parsedItems.push(parsed.data);
   }
 
-  const criadas = await prisma.$transaction(async (tx) => {
-    const resultado = [];
-    for (const item of parsedItems) {
-      const [competicao, mercado, casa] = await Promise.all([
-        upsertCompeticao(item.competicao, tx),
-        upsertMercado(item.mercado, tx),
-        upsertCasa(item.casa, tx),
-      ]);
-      const travaAtiva = item.travaAtiva ?? (await isTravaAtiva(tx, competicao.id, mercado.id));
+  let criadas;
+  try {
+    criadas = await prisma.$transaction(
+      async (tx) => {
+        const resultado = [];
+        for (const item of parsedItems) {
+          const [competicao, mercado, casa] = await Promise.all([
+            upsertCompeticao(item.competicao, tx),
+            upsertMercado(item.mercado, tx),
+            upsertCasa(item.casa, tx),
+          ]);
+          const travaAtiva = item.travaAtiva ?? (await isTravaAtiva(tx, competicao.id, mercado.id));
 
-      const aposta = await tx.aposta.create({
-        data: {
-          data: parseDataAposta(item.data),
-          competicaoId: competicao.id,
-          jogoDescricao: item.jogo,
-          mercadoId: mercado.id,
-          entradaDescricao: item.entrada,
-          casaId: casa.id,
-          odd: item.odd,
-          stake: item.stake,
-          pJusta: item.pJusta ?? null,
-          evPercentual: item.evPercentual ?? null,
-          categoriaRisco: item.categoriaRisco ?? null,
-          omaEfetiva: item.omaEfetiva ?? null,
-          travaAtiva,
-          notas: item.notas ?? null,
-        },
-        include: INCLUDE,
-      });
-      resultado.push(aposta);
-    }
-    return resultado;
-  });
+          const aposta = await tx.aposta.create({
+            data: {
+              data: parseDataAposta(item.data),
+              competicaoId: competicao.id,
+              jogoDescricao: item.jogo,
+              mercadoId: mercado.id,
+              entradaDescricao: item.entrada,
+              casaId: casa.id,
+              odd: item.odd,
+              stake: item.stake,
+              pJusta: item.pJusta ?? null,
+              evPercentual: item.evPercentual ?? null,
+              categoriaRisco: item.categoriaRisco ?? null,
+              omaEfetiva: item.omaEfetiva ?? null,
+              travaAtiva,
+              notas: item.notas ?? null,
+            },
+            include: INCLUDE,
+          });
+          resultado.push(aposta);
+        }
+        return resultado;
+      },
+      // Default do Prisma é 5s — baixo demais pra um lote de várias apostas
+      // contra o Neon (cada item faz até 4 idas ao banco). Sem isso, um lote
+      // um pouco maior estoura o timeout, a transação lança sem ser
+      // capturada, e o Next devolve um 500 sem corpo JSON — silencioso do
+      // lado de quem chama a API.
+      { timeout: 20_000, maxWait: 10_000 }
+    );
+  } catch (err) {
+    return apiError(500, err instanceof Error ? err.message : "Erro ao criar apostas");
+  }
 
   return NextResponse.json({ criadas: criadas.map(serializeAposta) }, { status: 201 });
 }

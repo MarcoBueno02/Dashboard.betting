@@ -23,16 +23,39 @@ function textResult(data: unknown, isError = false) {
  */
 export function buildMcpServer(origin: string, apiToken: string) {
   async function callApi(path: string, init?: RequestInit) {
-    const res = await fetch(`${origin}${path}`, {
-      ...init,
-      headers: {
-        ...(init?.headers ?? {}),
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-    const body = await res.json().catch(() => ({}));
-    return { ok: res.ok, body };
+    let res: Response;
+    try {
+      res = await fetch(`${origin}${path}`, {
+        ...init,
+        headers: {
+          ...(init?.headers ?? {}),
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (err) {
+      // Falha de rede/conexão chamando a própria API — sem isso, o erro
+      // desaparecia e a ferramenta MCP devolvia "{}" sem explicação.
+      return {
+        ok: false,
+        body: { error: "fetch_failed", message: err instanceof Error ? err.message : String(err) },
+      };
+    }
+
+    const raw = await res.text();
+    if (!raw) {
+      return { ok: res.ok, body: { status: res.status, message: "Resposta vazia da API" } };
+    }
+    try {
+      return { ok: res.ok, body: JSON.parse(raw) };
+    } catch {
+      // Resposta não-JSON (página de erro HTML, corpo truncado por timeout
+      // etc.) — melhor devolver o que veio do que engolir em "{}".
+      return {
+        ok: false,
+        body: { status: res.status, message: "Resposta da API não era JSON", raw: raw.slice(0, 2000) },
+      };
+    }
   }
 
   const server = new McpServer(

@@ -33,17 +33,22 @@ export async function POST(request: NextRequest) {
 
   const saldoAtual = round2(parsed.data.saldoAtual ?? 0);
 
-  const casa = await prisma.$transaction(async (tx) => {
-    const nova = await tx.casa.create({
-      data: {
-        nome: parsed.data.nome,
-        saldoAtual,
-        snapshots: { create: { saldo: saldoAtual, origem: "CONFIRMACAO_MANUAL" } },
-      },
+  let casa;
+  try {
+    casa = await prisma.$transaction(async (tx) => {
+      const nova = await tx.casa.create({
+        data: {
+          nome: parsed.data.nome,
+          saldoAtual,
+          snapshots: { create: { saldo: saldoAtual, origem: "CONFIRMACAO_MANUAL" } },
+        },
+      });
+      await registrarNovaUnidade(tx);
+      return nova;
     });
-    await registrarNovaUnidade(tx);
-    return nova;
-  });
+  } catch (err) {
+    return apiError(500, err instanceof Error ? err.message : "Erro ao criar casa");
+  }
 
   return NextResponse.json({ casa: serializeCasa(casa) }, { status: 201 });
 }
