@@ -1,0 +1,3010 @@
+[
+  {
+    "marketId": 104,
+    "marketType": "bothteamsscore",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 105,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 104,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 10300,
+    "marketType": "bothteamsscore",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10301,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 10300,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 10302,
+    "marketType": "bothteamsscore",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10303,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 10302,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 10158,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 0.25,
+    "outcomes": [
+      {
+        "outcomeId": 10158,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10159,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 106,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 107,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 106,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10160,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 0.75,
+    "outcomes": [
+      {
+        "outcomeId": 10160,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10161,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10162,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 10163,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10162,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10164,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 1.25,
+    "outcomes": [
+      {
+        "outcomeId": 10164,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10165,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 108,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 109,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 108,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10166,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 1.75,
+    "outcomes": [
+      {
+        "outcomeId": 10167,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10166,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10168,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 10168,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10169,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10170,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 2.25,
+    "outcomes": [
+      {
+        "outcomeId": 10171,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10170,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 1010,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 1011,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 1010,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10172,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 2.75,
+    "outcomes": [
+      {
+        "outcomeId": 10172,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10173,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10174,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 10174,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10175,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10176,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 3.25,
+    "outcomes": [
+      {
+        "outcomeId": 10177,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10176,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 1012,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 1012,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 1013,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10178,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 3.75,
+    "outcomes": [
+      {
+        "outcomeId": 10178,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10179,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10180,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 10181,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10180,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10182,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 4.25,
+    "outcomes": [
+      {
+        "outcomeId": 10182,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10183,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 1014,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 1014,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 1015,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10184,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 4.75,
+    "outcomes": [
+      {
+        "outcomeId": 10185,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10184,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10186,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 10186,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10187,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10188,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 5.25,
+    "outcomes": [
+      {
+        "outcomeId": 10188,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10189,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 1016,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 1016,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 1017,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10190,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 5.75,
+    "outcomes": [
+      {
+        "outcomeId": 10191,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10190,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10192,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 10192,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10193,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10194,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 6.25,
+    "outcomes": [
+      {
+        "outcomeId": 10194,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10195,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 1018,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 1019,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 1018,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10196,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 6.75,
+    "outcomes": [
+      {
+        "outcomeId": 10196,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10197,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10198,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 10199,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10198,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10200,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 7.25,
+    "outcomes": [
+      {
+        "outcomeId": 10200,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10201,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 1020,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 1020,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 1021,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10202,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 7.75,
+    "outcomes": [
+      {
+        "outcomeId": 10202,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10203,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10204,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 10205,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10204,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10206,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 8.25,
+    "outcomes": [
+      {
+        "outcomeId": 10206,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10207,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 1022,
+    "marketType": "totals",
+    "period": "fulltime",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 1023,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 1022,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10488,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 0.25,
+    "outcomes": [
+      {
+        "outcomeId": 10489,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10488,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10256,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 10257,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10256,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10490,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 0.75,
+    "outcomes": [
+      {
+        "outcomeId": 10490,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10491,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10492,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 10492,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10493,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10494,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 1.25,
+    "outcomes": [
+      {
+        "outcomeId": 10494,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10495,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10258,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 10259,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10258,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10496,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 1.75,
+    "outcomes": [
+      {
+        "outcomeId": 10497,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10496,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10498,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 10498,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10499,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10500,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 2.25,
+    "outcomes": [
+      {
+        "outcomeId": 10501,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10500,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10260,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 10260,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10261,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10502,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 2.75,
+    "outcomes": [
+      {
+        "outcomeId": 10502,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10503,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10504,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 10504,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10505,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10506,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 3.25,
+    "outcomes": [
+      {
+        "outcomeId": 10507,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10506,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10262,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 10263,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10262,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10508,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 3.75,
+    "outcomes": [
+      {
+        "outcomeId": 10508,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10509,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10510,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 10510,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10511,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10512,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 4.25,
+    "outcomes": [
+      {
+        "outcomeId": 10513,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10512,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10264,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 10265,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10264,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10514,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 4.75,
+    "outcomes": [
+      {
+        "outcomeId": 10514,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10515,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10516,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 10516,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10517,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10518,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 5.25,
+    "outcomes": [
+      {
+        "outcomeId": 10518,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10519,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10266,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 10267,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10266,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10520,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 5.75,
+    "outcomes": [
+      {
+        "outcomeId": 10521,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10520,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10522,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 10523,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10522,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10524,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 6.25,
+    "outcomes": [
+      {
+        "outcomeId": 10525,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10524,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10268,
+    "marketType": "totals",
+    "period": "p1",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 10268,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10269,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10526,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 0.25,
+    "outcomes": [
+      {
+        "outcomeId": 10526,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10527,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10270,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 10270,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10271,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10528,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 0.75,
+    "outcomes": [
+      {
+        "outcomeId": 10528,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10529,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10530,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 10530,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10531,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10532,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 1.25,
+    "outcomes": [
+      {
+        "outcomeId": 10532,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10533,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10272,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 10273,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10272,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10534,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 1.75,
+    "outcomes": [
+      {
+        "outcomeId": 10534,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10535,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10536,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 10537,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10536,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10538,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 2.25,
+    "outcomes": [
+      {
+        "outcomeId": 10538,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10539,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10274,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 10275,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10274,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10540,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 2.75,
+    "outcomes": [
+      {
+        "outcomeId": 10540,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10541,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10542,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 10542,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10543,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10544,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 3.25,
+    "outcomes": [
+      {
+        "outcomeId": 10544,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10545,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10276,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 10276,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10277,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10546,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 3.75,
+    "outcomes": [
+      {
+        "outcomeId": 10547,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10546,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10548,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 10549,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10548,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10550,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 4.25,
+    "outcomes": [
+      {
+        "outcomeId": 10551,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10550,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10278,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 10279,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10278,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10552,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 4.75,
+    "outcomes": [
+      {
+        "outcomeId": 10552,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10553,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10554,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 10555,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10554,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10556,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 5.25,
+    "outcomes": [
+      {
+        "outcomeId": 10556,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10557,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10280,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 10280,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10281,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10558,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 5.75,
+    "outcomes": [
+      {
+        "outcomeId": 10558,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10559,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10560,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 10560,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10561,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10562,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 6.25,
+    "outcomes": [
+      {
+        "outcomeId": 10563,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10562,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10282,
+    "marketType": "totals",
+    "period": "p2",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 10282,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10283,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10767,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 10767,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10768,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10769,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 10770,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10769,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10771,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 10772,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10771,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10773,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 10773,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10774,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10775,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 10775,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10776,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10777,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 10777,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10778,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10779,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 10779,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10780,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10781,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 10782,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10781,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10783,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 10784,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10783,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10785,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 10786,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10785,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10787,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 10788,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10787,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10789,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 10790,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10789,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10791,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 10792,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10791,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10793,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 10793,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10794,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10795,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 10796,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10795,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10797,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 10798,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10797,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10799,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 10799,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10800,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10801,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 10802,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10801,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10803,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 10804,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10803,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10805,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 10805,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10806,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10807,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 10.5,
+    "outcomes": [
+      {
+        "outcomeId": 10807,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10808,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10809,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 11.0,
+    "outcomes": [
+      {
+        "outcomeId": 10809,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10810,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10811,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 11.5,
+    "outcomes": [
+      {
+        "outcomeId": 10812,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10811,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10813,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 12.0,
+    "outcomes": [
+      {
+        "outcomeId": 10813,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10814,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10815,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 12.5,
+    "outcomes": [
+      {
+        "outcomeId": 10815,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10816,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10817,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 13.0,
+    "outcomes": [
+      {
+        "outcomeId": 10817,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10818,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10819,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 13.5,
+    "outcomes": [
+      {
+        "outcomeId": 10819,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10820,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10821,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 14.0,
+    "outcomes": [
+      {
+        "outcomeId": 10822,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10821,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10823,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 14.5,
+    "outcomes": [
+      {
+        "outcomeId": 10824,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10823,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10825,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 15.0,
+    "outcomes": [
+      {
+        "outcomeId": 10826,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10825,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10827,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 15.5,
+    "outcomes": [
+      {
+        "outcomeId": 10827,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10828,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10829,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 16.0,
+    "outcomes": [
+      {
+        "outcomeId": 10829,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10830,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10831,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 16.5,
+    "outcomes": [
+      {
+        "outcomeId": 10832,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10831,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10833,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 17.0,
+    "outcomes": [
+      {
+        "outcomeId": 10833,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10834,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10835,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 17.5,
+    "outcomes": [
+      {
+        "outcomeId": 10835,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10836,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10837,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 18.0,
+    "outcomes": [
+      {
+        "outcomeId": 10838,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10837,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10839,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 18.5,
+    "outcomes": [
+      {
+        "outcomeId": 10840,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10839,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10841,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 19.0,
+    "outcomes": [
+      {
+        "outcomeId": 10841,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10842,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10843,
+    "marketType": "totals-corners",
+    "period": "fulltime",
+    "handicap": 19.5,
+    "outcomes": [
+      {
+        "outcomeId": 10843,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10844,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101535,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 101536,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101535,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101537,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 101537,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101538,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101539,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 101540,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101539,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101541,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 101542,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101541,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101543,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 101544,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101543,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101545,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 101546,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101545,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101547,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 101547,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101548,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101549,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 101549,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101550,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101551,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 101551,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101552,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101553,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 101554,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101553,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101555,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 101555,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101556,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101557,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 101558,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101557,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101559,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 101560,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101559,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101561,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 101561,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101562,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101563,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 101563,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101564,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101565,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 101565,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101566,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101567,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 101568,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101567,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101569,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 101570,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101569,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101571,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 101572,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101571,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101573,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 101574,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101573,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101575,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 10.5,
+    "outcomes": [
+      {
+        "outcomeId": 101576,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101575,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101577,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 11.0,
+    "outcomes": [
+      {
+        "outcomeId": 101578,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101577,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101579,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 11.5,
+    "outcomes": [
+      {
+        "outcomeId": 101580,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101579,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101581,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 12.0,
+    "outcomes": [
+      {
+        "outcomeId": 101581,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101582,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101583,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 12.5,
+    "outcomes": [
+      {
+        "outcomeId": 101584,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101583,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101585,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 13.0,
+    "outcomes": [
+      {
+        "outcomeId": 101585,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101586,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101587,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 13.5,
+    "outcomes": [
+      {
+        "outcomeId": 101587,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101588,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101589,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 14.0,
+    "outcomes": [
+      {
+        "outcomeId": 101590,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101589,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101591,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 14.5,
+    "outcomes": [
+      {
+        "outcomeId": 101591,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101592,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101593,
+    "marketType": "totals-corners",
+    "period": "p1",
+    "handicap": 15.0,
+    "outcomes": [
+      {
+        "outcomeId": 101593,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101594,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101720,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 101720,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101721,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101722,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 101722,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101723,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101724,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 101724,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101725,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101726,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 101726,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101727,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101728,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 101728,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101729,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101730,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 101731,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101730,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101732,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 101733,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101732,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101734,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 101734,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101735,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101736,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 101737,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101736,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101738,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 101739,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101738,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101740,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 101741,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101740,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101742,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 101743,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101742,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101744,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 101745,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101744,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101746,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 101747,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101746,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101748,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 101749,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101748,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101750,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 101751,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101750,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101752,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 101752,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101753,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101754,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 101754,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101755,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101756,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 101757,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101756,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101758,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 101758,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101759,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101760,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 10.5,
+    "outcomes": [
+      {
+        "outcomeId": 101761,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101760,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101762,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 11.0,
+    "outcomes": [
+      {
+        "outcomeId": 101763,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101762,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101764,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 11.5,
+    "outcomes": [
+      {
+        "outcomeId": 101764,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101765,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101766,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 12.0,
+    "outcomes": [
+      {
+        "outcomeId": 101767,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101766,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101768,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 12.5,
+    "outcomes": [
+      {
+        "outcomeId": 101769,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101768,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101770,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 13.0,
+    "outcomes": [
+      {
+        "outcomeId": 101770,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101771,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101772,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 13.5,
+    "outcomes": [
+      {
+        "outcomeId": 101773,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101772,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101774,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 14.0,
+    "outcomes": [
+      {
+        "outcomeId": 101774,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101775,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101776,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 14.5,
+    "outcomes": [
+      {
+        "outcomeId": 101776,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101777,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101778,
+    "marketType": "totals-corners",
+    "period": "p2",
+    "handicap": 15.0,
+    "outcomes": [
+      {
+        "outcomeId": 101779,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101778,
+        "outcomeName": "Mais"
+      }
+    ]
+  }
+]

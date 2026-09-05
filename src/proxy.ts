@@ -16,6 +16,7 @@ function isTokenApiRoute(pathname: string) {
   if (/^\/api\/apostas\/[^/]+\/resultado$/.test(pathname)) return true;
   if (pathname === "/api/segmentado") return true;
   if (pathname === "/api/travas" || pathname.startsWith("/api/travas/")) return true;
+  if (pathname === "/api/odds/melhor") return true;
   return false;
 }
 

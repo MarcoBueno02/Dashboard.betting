@@ -155,3 +155,31 @@ model McpAuthorizationCode {
 
   @@index([expiresAt])
 }
+
+// Fase 3 — correspondência entre o nome de competição usado no dashboard
+// (Competicao.nome) e o tournamentId da OddsPapi. Alimentada dinamicamente
+// (nunca hardcoded): quando uma competição ainda não mapeada é buscada, o
+// sistema tenta casar o nome contra o catálogo de torneios da OddsPapi e,
+// se a correspondência não for inequívoca, deixa sem preencher em vez de
+// arriscar um vínculo errado.
+model TorneioMapeamento {
+  id                    String   @id @default(cuid())
+  nomeInterno           String   @unique
+  tournamentId          Int
+  tournamentName        String
+  confirmadoManualmente Boolean  @default(false)
+  criadoEm              DateTime @default(now())
+  atualizadoEm          DateTime @updatedAt
+
+  @@index([tournamentId])
+}
+
+// Cache genérico de respostas da OddsPapi (Fase 3), para respeitar a cota
+// mensal de 250 requisições. Usado tanto para a lista de torneios (TTL
+// longo, muda raramente) quanto para odds por fixture (TTL de poucos
+// minutos, ver ODDS_CACHE_TTL_MS).
+model OddsCacheEntry {
+  chave     String   @id
+  payload   Json
+  buscadoEm DateTime @default(now())
+}

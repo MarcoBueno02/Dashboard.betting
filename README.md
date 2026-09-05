@@ -58,6 +58,7 @@ Acesse `http://localhost:3000` e entre com a senha definida em `APP_PASSWORD`.
 | `MCP_CLIENT_SECRET` | Segredo do cliente OAuth do servidor MCP. Gere com `openssl rand -hex 32`. |
 | `MCP_OAUTH_SECRET` | Chave de assinatura dos tokens de acesso/refresh emitidos pelo servidor MCP. Gere com `openssl rand -hex 32`. |
 | `MCP_REDIRECT_URI` | Redirect URI aceito pelo `/authorize` do servidor MCP. Para o conector do Claude.ai: `https://claude.ai/api/mcp/auth_callback`. |
+| `ODDSPAPI_API_KEY` | Chave da API da OddsPapi (Fase 3, busca de melhor odd). Plano gratuito: 250 requisições/mês. |
 
 ## Estrutura
 
@@ -129,6 +130,7 @@ sessão de navegador como sempre exigiu; ela não faz parte desta API por token.
 | GET     | `/api/travas`                  | Lista travas (filtro opcional `status=ATIVA\|REMOVIDA`) |
 | POST    | `/api/travas`                  | Cria uma trava nova                                    |
 | PATCH   | `/api/travas/:id`              | Atualiza trava (status, teto, motivo, rodadas positivas) |
+| GET     | `/api/odds/melhor`             | Busca a melhor odd real pra uma entrada (Fase 3, ver seção própria abaixo) |
 
 `casa`, `competicao` e `mercado` em `POST /api/apostas` (e `competicao`/
 `mercado` em `POST /api/travas`) podem vir como nome — se não existir um
@@ -213,6 +215,13 @@ curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: applicatio
 curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
   -d '{"status": "REMOVIDA"}' \
   "$BASE/api/travas/<id>"
+
+# Melhor odd real pra uma entrada (Fase 3)
+curl -H "Authorization: Bearer $API_TOKEN" -G "$BASE/api/odds/melhor" \
+  --data-urlencode "jogo=EC Juventude x AC Goianiense" \
+  --data-urlencode "competicao=Brasileirão Série B" \
+  --data-urlencode "mercado=Escanteios O/U" \
+  --data-urlencode "entrada=Under 8.5"
 ```
 
 Todas as rotas acima foram testadas manualmente contra um banco Postgres real
@@ -290,8 +299,8 @@ pra isso.
 `consultar_bancas`, `atualizar_saldo_casa`, `criar_casa`, `criar_aposta`,
 `listar_apostas_pendentes`, `buscar_apostas`, `listar_apostas`,
 `atualizar_resultado_aposta`, `consultar_segmentado`, `listar_travas`,
-`criar_trava`, `atualizar_trava` — uma pra cada rota principal da API da
-Fase 1, com descrição em português pra cada uma.
+`criar_trava`, `atualizar_trava`, `consultar_melhor_odd` — uma pra cada rota
+principal da API (Fase 1 e Fase 3), com descrição em português pra cada uma.
 
 ### Testado
 
@@ -328,3 +337,146 @@ porque não o implementamos, e não dá pra dirigir o Claude.ai a partir daqui
    Claude volta com um token e a conexão fica pronta.
 6. Peça pro Claude listar as apostas pendentes ou consultar as bancas pra
    confirmar que as ferramentas respondem.
+
+## Busca automática da melhor odd (Fase 3)
+
+`GET /api/odds/melhor?jogo=...&competicao=...&mercado=...&entrada=...` (mesmo
+formato de `jogo`/`competicao`/`mercado`/`entrada` usado em `criar_aposta`)
+resolve automaticamente o torneio, encontra o jogo, identifica o mercado e a
+linha certos, busca as odds nas casas confirmadas via
+[OddsPapi](https://oddspapi.io) e devolve a melhor — ou um motivo claro de
+não-encontrado. Nunca inventa ou aproxima um valor.
+
+### Resposta
+
+```jsonc
+// Encontrado
+{
+  "encontrado": true,
+  "jogo": "EC Juventude x AC Goianiense",
+  "entrada": "Under 8.5",
+  "melhorOdd": 3,
+  "casa": "betano.bet.br",
+  "todasAsOdds": [
+    { "casa": "betano.bet.br", "odd": 3 },
+    { "casa": "estrelabet.bet.br", "odd": null },
+    { "casa": "superbet.bet.br", "odd": 2.75 }
+  ],
+  "atualizadoEm": "2026-09-05T16:34:11.037Z"
+}
+
+// Não encontrado — motivo é um dos 5 abaixo
+{ "encontrado": false, "motivo": "torneio_nao_mapeado" }
+```
+
+`motivo`: `torneio_nao_mapeado` (competição sem correspondência confiável no
+catálogo de torneios), `jogo_nao_localizado`, `mercado_nao_suportado`
+(padrão de `entrada` não reconhecido, ou explicitamente Cartões — ver
+abaixo), `sem_odd_nenhuma_casa` (jogo e mercado achados, nenhuma casa
+confirmada tinha essa odd no momento) e `cota_excedida`.
+
+> Nota sobre a Seção 5 do prompt original: ela citava "404 com mensagem
+> clara" pro caso de torneio não mapeado, mas o contrato de resposta
+> concreto (usado por todos os outros 4 motivos) é um 200 com
+> `{"encontrado": false, "motivo": "..."}`. Optei por manter os 5 motivos
+> consistentes num único formato — mais fácil de consumir, inclusive pela
+> ferramenta MCP — em vez de um HTTP status diferente só pra esse caso.
+
+### Mercados suportados
+
+Só os mercados testados e confirmados com odd real (ver seção 0 do prompt
+original): Gols O/U, Escanteios O/U e Ambas Marcam, cada um em tempo
+completo, 1º tempo ou 2º tempo. `entrada` precisa seguir um desses padrões
+(`src/lib/oddspapi/mercados.ts`):
+
+- `"Over 2.5 Gols"`, `"Under 2.5"`, `"Mais de 2.5 gols"`, `"Menos de 8.5
+  escanteios"` — direção (Over/Mais ou Under/Menos) + linha numérica.
+  Escanteios vs. gols é decidido por palavra-chave ("escanteio"/"corner"),
+  senão assume gols.
+- `"Ambas Marcam Sim"` / `"...Não"` — precisa ter "sim" ou "não" (não os
+  dois, nem nenhum).
+- `"1º tempo"` / `"2º tempo"` em `mercado` ou `entrada` seleciona o período;
+  sem isso, assume tempo completo.
+
+Qualquer coisa fora desses padrões (`"Resultado Mandante"`, handicap
+asiático, etc.) — e **qualquer menção a "Cartões"**, mesmo que o padrão
+batesse — retorna `mercado_nao_suportado` sem gastar nenhuma chamada de
+API. Isso é deliberado: o catálogo real da OddsPapi (baixado durante essa
+implementação) tem um mercado `totals-bookings` ("Cartões - Mais/Menos")
+que *existe* na taxonomia deles — diferente do que o prompt original
+assumia ("Cartões não existe no catálogo") — mas isso não significa que
+alguma casa ofereça odd real pra esses jogos; como o prompt pediu
+explicitamente pra nunca gastar uma chamada testando isso de novo, o
+código recusa esse mercado sem verificar, e deixo esse detalhe registrado
+aqui em vez de simplesmente seguir a suposição original calada.
+
+### Casas confirmadas
+
+`betano.bet.br`, `estrelabet.bet.br`, `superbet.bet.br`
+(`src/lib/oddspapi/melhor-odd.ts`, `BOOKMAKERS_CONFIRMADAS`).
+
+**`betnacional` testado e descartado**: o slug `betnacional.bet.br` sugerido
+no prompt **não existe** na lista de bookmakers da assinatura (conferido via
+`GET /v4/account` — a lista completa de ~370 bookmakers não tem essa
+variante, só o slug simples `betnacional`). E o slug simples, testado contra
+dois jogos reais do Brasileirão Série B (incluindo um dos dois maiores da
+rodada), **não retornou nenhum dado** — nem sequer aparece na resposta de
+`/v4/odds`, diferente de betano/estrela/superbet que sempre aparecem. Ou
+seja: não é falta de teste, é um bookmaker que essa integração não cobre pra
+essas ligas. Fica de fora da lista até algum teste futuro mostrar o
+contrário.
+
+### Mapeamento de torneios
+
+`TorneioMapeamento` (tabela nova) guarda `nomeInterno → tournamentId` da
+OddsPapi. Seedada com as duas competições já confirmadas manualmente
+(`Brasileirão Série B` → 390, `Primera División Argentina` → 155 —
+"Liga Profissional" no catálogo deles; os nomes não batem nem por
+aproximação, por isso essas duas *precisam* do seed manual). Pra qualquer
+outra competição, a resolução é dinâmica: busca `GET
+/v4/tournaments?sportId=10&language=pt` (cacheado 24h) e só vincula
+automaticamente se o nome bater de forma inequívoca (igual normalizado, ou
+contido um no outro, contanto que seja candidato único) — caso contrário
+retorna `torneio_nao_mapeado` em vez de arriscar um vínculo errado.
+
+### Cache e cota
+
+Cota gratuita: 250 requisições/mês. `/v4/account` é sempre isento (nunca
+conta, mesmo com a cota esgotada) e `/v4/historical-odds` é sempre grátis —
+mas, ao contrário do que o prompt original assumia, **`/v4/languages` conta
+normalmente** pra cota (só não é usado nesta integração, então não faz
+diferença na prática). Fonte: página oficial "Requests & Quota" da
+documentação da OddsPapi.
+
+Odds por fixture e a lista de fixtures por torneio ficam em cache
+(`OddsCacheEntry`, tabela nova) por 5 minutos; a lista de torneios por 24h.
+Um 429 com `code: "REQUEST_LIMIT_EXCEEDED"` vira `{"encontrado": false,
+"motivo": "cota_excedida"}` — nunca um erro genérico.
+
+### Ferramenta MCP
+
+`consultar_melhor_odd` — mesmos 4 parâmetros do endpoint. Testada de verdade
+com um cliente MCP real (`Client`/`InMemoryTransport` do próprio SDK) contra
+o servidor construído por `buildMcpServer`, não só contra o endpoint REST por
+baixo.
+
+### Testado
+
+- Fluxo completo (torneio → jogo → mercado → odds → melhor) contra um jogo
+  real do Brasileirão Série B do dia, nos 3 mercados suportados (Gols O/U,
+  Escanteios O/U, Ambas Marcam).
+- Os 4 motivos de não-encontrado, cada um confirmado sem gastar chamada de
+  API além do estritamente necessário: `mercado_nao_suportado` (Cartões e
+  "Resultado Mandante", ambos sem nenhuma chamada), `jogo_nao_localizado`
+  (time inexistente, reaproveitando o cache de fixtures), `torneio_nao_mapeado`
+  (competição inventada — esse caso *precisa* de 1 chamada real pra
+  `/v4/tournaments`, já que é o único jeito de confirmar que não bate).
+- `consultar_melhor_odd` via cliente MCP real.
+- Cache confirmado por medição direta de cota antes/depois de cada bateria
+  de testes (via `GET /v4/account`, chamada isenta) — repetir a mesma
+  fixture/casas não gasta cota de novo.
+
+**Chamadas reais de API gastas durante todo o desenvolvimento e teste desta
+fase**: 8 (`/v4/tournaments` ×2, `/v4/markets` ×1, `/v4/fixtures` ×2,
+`/v4/odds` ×3). Cota usada ao final: 24/250 (`/v4/account`, sempre isento,
+não conta nesse total).

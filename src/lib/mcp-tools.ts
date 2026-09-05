@@ -285,5 +285,24 @@ export function buildMcpServer(origin: string, apiToken: string) {
     }
   );
 
+  server.registerTool(
+    "consultar_melhor_odd",
+    {
+      description:
+        "Busca automaticamente a melhor odd disponível pra uma entrada específica (jogo, competição, mercado e entrada — mesmo formato de criar_aposta), comparando as casas confirmadas. Só funciona pra mercados de Gols O/U, Escanteios O/U e Ambas Marcam (tempo completo, 1º ou 2º tempo); nunca busca Cartões. Trate o resultado como referência forte, não como confirmação final — confira no app antes de apostar de verdade.",
+      inputSchema: {
+        jogo: z.string().describe('Ex: "Athletic Club x Vila Nova"'),
+        competicao: z.string().describe('Ex: "Brasileirão Série B"'),
+        mercado: z.string().describe('Ex: "Escanteios O/U"'),
+        entrada: z.string().describe('Ex: "Under 2.5 Gols" ou "Ambas Marcam Não"'),
+      },
+    },
+    async ({ jogo, competicao, mercado, entrada }) => {
+      const params = new URLSearchParams({ jogo, competicao, mercado, entrada });
+      const r = await callApi(`/api/odds/melhor?${params.toString()}`);
+      return textResult(r.body, !r.ok);
+    }
+  );
+
   return server;
 }
