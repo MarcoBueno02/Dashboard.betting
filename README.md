@@ -384,31 +384,93 @@ confirmada tinha essa odd no momento) e `cota_excedida`.
 
 ### Mercados suportados
 
-Só os mercados testados e confirmados com odd real (ver seção 0 do prompt
-original): Gols O/U, Escanteios O/U e Ambas Marcam, cada um em tempo
-completo, 1º tempo ou 2º tempo. `entrada` precisa seguir um desses padrões
-(`src/lib/oddspapi/mercados.ts`):
+Gols O/U, Escanteios O/U, Cartões O/U, Ambas Marcam, Resultado (1x2),
+Dupla Chance e Escanteios 1x2 — cada um em tempo completo, 1º tempo ou 2º
+tempo onde a OddsPapi tiver essa variante. `entrada` precisa seguir um
+desses padrões (`src/lib/oddspapi/mercados.ts`):
 
-- `"Over 2.5 Gols"`, `"Under 2.5"`, `"Mais de 2.5 gols"`, `"Menos de 8.5
-  escanteios"` — direção (Over/Mais ou Under/Menos) + linha numérica.
-  Escanteios vs. gols é decidido por palavra-chave ("escanteio"/"corner"),
-  senão assume gols.
-- `"Ambas Marcam Sim"` / `"...Não"` — precisa ter "sim" ou "não" (não os
+- **Over/Under** (Gols, Escanteios ou Cartões): `"Over 2.5 Gols"`,
+  `"Under 2.5"`, `"Mais de 2.5 gols"`, `"Menos de 8.5 escanteios"` —
+  direção (Over/Mais ou Under/Menos) + linha numérica. A direção só é lida
+  da **entrada**, nunca do mercado combinado — ver "Bug corrigido" abaixo.
+  Escanteios/Cartões vs. gols é decidido por palavra-chave no mercado ou na
+  entrada ("escanteio"/"corner", "cartão"), senão assume gols.
+- **Ambas Marcam**: `"Sim"` / `"Não"` — precisa ter um dos dois (não os
   dois, nem nenhum).
-- `"1º tempo"` / `"2º tempo"` em `mercado` ou `entrada` seleciona o período;
-  sem isso, assume tempo completo.
+- **Resultado / Escanteios 1x2**: `"<Time> vence"`, `"Empate"`,
+  `"Mandante"`/`"Casa"`, `"Visitante"`/`"Fora"`, ou o token cru `"1"`/`"X"`/
+  `"2"`. Quando a entrada cita um nome de time, ele só é resolvido **depois**
+  do jogo já ter sido encontrado (é preciso saber quem é `participant1`/
+  `participant2` na fixture real pra saber se "Fluminense vence" é `1` ou
+  `2`) — nunca assume que um lado é sempre o mesmo outcome.
+- **Dupla Chance**: `"<Time> ou Empate"`, `"<Time A> ou <Time B>"`,
+  `"Mandante ou Empate"`, `"Visitante ou Empate"`, ou o token cru `"1X"`/
+  `"12"`/`"X2"`.
+- `"1º tempo"`/`"2º tempo"`/`"HT"` em `mercado` ou `entrada` seleciona o
+  período; sem isso, assume tempo completo.
 
-Qualquer coisa fora desses padrões (`"Resultado Mandante"`, handicap
-asiático, etc.) — e **qualquer menção a "Cartões"**, mesmo que o padrão
-batesse — retorna `mercado_nao_suportado` sem gastar nenhuma chamada de
-API. Isso é deliberado: o catálogo real da OddsPapi (baixado durante essa
-implementação) tem um mercado `totals-bookings` ("Cartões - Mais/Menos")
-que *existe* na taxonomia deles — diferente do que o prompt original
-assumia ("Cartões não existe no catálogo") — mas isso não significa que
-alguma casa ofereça odd real pra esses jogos; como o prompt pediu
-explicitamente pra nunca gastar uma chamada testando isso de novo, o
-código recusa esse mercado sem verificar, e deixo esse detalhe registrado
-aqui em vez de simplesmente seguir a suposição original calada.
+Mercados compostos/exóticos já cadastrados no app mas sem correspondência
+1:1 num único mercado da OddsPapi (`"Resultado/DC"`, `"Resultado/DC/DNB"`,
+produtos combinados de casa específica) são recusados explicitamente, e
+não caem por engano no mercado de Dupla Chance só por conterem "DC" no
+nome. Qualquer outra coisa fora desses padrões (handicap asiático, "Vitória
+Sem Sofrer" — identificado no catálogo como `wintonil-team1`/`wintonil-team2`
+mas ainda não implementado, "Geral", etc.) retorna `mercado_nao_suportado`
+sem gastar nenhuma chamada de API.
+
+### Bug corrigido (Fase 3.1): Gols O/U não funcionava com o nome real do mercado
+
+O mercado de gols está cadastrado no app como **`"Over/Under Gols"`** (ver
+`prisma/seed.ts`) — meses depois de eu ter testado a Fase 3 original só com
+o nome abreviado `"Gols O/U"`. A detecção de direção (Over vs. Under)
+buscava as duas palavras no texto combinado de mercado + entrada; como o
+nome do mercado já contém as duas palavras ("**Over**/**Under** Gols"), a
+checagem "achou Over e Under ao mesmo tempo → ambíguo, recusar" disparava
+sempre, e **toda consulta de Gols O/U com o nome real do mercado vinha
+retornando `mercado_nao_suportado` desde que a Fase 3 foi ao ar** — sem
+gastar API, então nunca gerou nenhum efeito colateral, mas também nunca
+funcionou de verdade nesse mercado específico com o nome real. Corrigido:
+a direção agora é lida só da `entrada`, nunca do `mercado`. Confirmado com
+o mesmo teste (`"Over/Under Gols"` + `"Over 2.5"`) voltando odd real depois
+do fix.
+
+### Bug investigado (Fase 3.1): Superbet aparecendo como `null` indevidamente?
+
+Reportado: `consultar_melhor_odd` pra "Ambas Marcam Sim" em Fluminense x
+Vasco da Gama devolveu Superbet como `null`, mas o usuário confirmou odd
+real de 1,85 direto no app da Superbet no mesmo momento. Investigação (ver
+as 3 hipóteses do prompt original):
+
+1. **Estrutura diferente por bookmaker?** Não — a resposta bruta da
+   `/v4/odds` (bypassando qualquer cache nossa, chamada direta) mostra que
+   a Superbet **não tem o marketId 104** (Ambas Marcam Tempo Completo) na
+   lista de ~250 mercados dela pra essa fixture — mas **tem** os dois
+   mercados de tempo (1º e 2º) de Ambas Marcam. Não é uma chave/outcome
+   diferente escondida em outro lugar: o mercado de tempo completo
+   simplesmente não está na resposta da Superbet pra esse jogo específico.
+2. **Cache desatualizada?** Não — reproduzido com uma chamada real direta à
+   OddsPapi (sem passar pela nossa cache de 5min) minutos depois, mesmo
+   resultado. Também testado com `verbosity=1/2/3`: nenhuma diferença.
+3. **Erro de parsing silencioso?** Não havia nenhuma exceção sendo
+   engolida — o `null` era o reflexo fiel da ausência real do mercado na
+   resposta. Ainda assim, implementei a distinção pedida por segurança:
+   `extrairOdd()` (`melhor-odd.ts`) agora só devolve `{casa, odd: null}`
+   quando a estrutura realmente não tem o mercado/outcome esperado, e
+   devolve `{casa, odd: null, erro: "..."}` se o formato vier diferente do
+   esperado (ex: campo `price` ausente ou não-numérico) — daqui pra frente,
+   um bug de parsing de verdade nunca mais se disfarça de "casa sem odd".
+
+Conclusão: os números de betano (1,82) e estrelabet (1,889) que a
+ferramenta retornou batem exatamente com uma chamada direta à API feita
+na investigação — confirma que a resolução de mercado/linha estava
+correta. O motivo real é que a própria OddsPapi não tinha esse mercado
+específico da Superbet pra esse jogo no momento consultado (provável
+lacuna de cobertura pontual da Superbet nessa aposta, não um bug nosso) —
+a odd de 1,85 que o usuário viu no app da Superbet pode ter aparecido
+depois da consulta, ou a OddsPapi simplesmente não capturou aquele
+mercado específico pra essa fixture. Não é algo que o código consiga
+corrigir; o tratamento correto (distinguir erro de ausência) já estava
+certo e ficou mais explícito.
 
 ### Casas confirmadas
 
@@ -462,21 +524,40 @@ baixo.
 
 ### Testado
 
-- Fluxo completo (torneio → jogo → mercado → odds → melhor) contra um jogo
-  real do Brasileirão Série B do dia, nos 3 mercados suportados (Gols O/U,
-  Escanteios O/U, Ambas Marcam).
+- Fluxo completo (torneio → jogo → mercado → odds → melhor) contra jogos
+  reais do Brasileirão Série A e Série B, em todos os mercados suportados:
+  Gols O/U (incluindo o nome real `"Over/Under Gols"`, pós-fix), Escanteios
+  O/U, **Cartões O/U (odd real confirmada nas 3 casas — ver "Cartões"
+  abaixo)**, Ambas Marcam, Resultado 1x2 (mandante, visitante e empate,
+  cada um batendo com o time certo), Dupla Chance (as 3 formas: `<Time> ou
+  Empate`, token cru `"12"`, `"Visitante ou Empate"`) e Escanteios 1x2.
+- `"Resultado Mandante"` — exemplo que a Fase 3 original listava como
+  *não suportado* — agora resolve corretamente pra `1` (mandante), porque
+  Resultado passou a ser um mercado suportado nesta fase.
+- Mercados compostos (`"Resultado/DC"`, `"Resultado/DC/DNB"`) e nomes de
+  time inexistentes continuam corretamente recusados como
+  `mercado_nao_suportado`, sem cair por engano em Dupla Chance ou Resultado.
 - Os 4 motivos de não-encontrado, cada um confirmado sem gastar chamada de
-  API além do estritamente necessário: `mercado_nao_suportado` (Cartões e
-  "Resultado Mandante", ambos sem nenhuma chamada), `jogo_nao_localizado`
-  (time inexistente, reaproveitando o cache de fixtures), `torneio_nao_mapeado`
-  (competição inventada — esse caso *precisa* de 1 chamada real pra
-  `/v4/tournaments`, já que é o único jeito de confirmar que não bate).
-- `consultar_melhor_odd` via cliente MCP real.
+  API além do estritamente necessário.
+- `consultar_melhor_odd` via cliente MCP real, inclusive num dos novos
+  mercados (Resultado).
 - Cache confirmado por medição direta de cota antes/depois de cada bateria
-  de testes (via `GET /v4/account`, chamada isenta) — repetir a mesma
-  fixture/casas não gasta cota de novo.
+  de testes (via `GET /v4/account`, chamada isenta): todas as variações de
+  mercado testadas contra a mesma fixture reaproveitaram a mesma entrada de
+  cache de odds — só a primeira consulta a uma fixture nova custa 1
+  chamada real de `/v4/odds`.
 
-**Chamadas reais de API gastas durante todo o desenvolvimento e teste desta
-fase**: 8 (`/v4/tournaments` ×2, `/v4/markets` ×1, `/v4/fixtures` ×2,
-`/v4/odds` ×3). Cota usada ao final: 24/250 (`/v4/account`, sempre isento,
-não conta nesse total).
+**Cartões (`totals-bookings`) — teste real pedido na Fase 3.1**: testado
+contra Fluminense x Vasco da Gama (Brasileirão Série A), `"Over 4.5"`.
+Resultado: **as 3 casas confirmadas têm odd real** — betano 1,40, estrelabet
+1,40, superbet 1,34. Diferente do que aconteceu com a Betnacional, esse
+mercado funciona de verdade nas casas já confirmadas, pelo menos pra essa
+liga/jogo. Vale testar de novo eventualmente noutra liga antes de confiar
+cegamente, mas deixou de ser "desconhecido" — passa a fazer parte dos
+mercados normalmente suportados.
+
+**Chamadas reais de API gastas**: Fase 3 original: 8. Fase 3.1 (bug do
+Superbet + ampliação de mercados): mais 8 (`/v4/fixtures` ×2, `/v4/odds`
+×6, sendo 3 delas só pra investigar o caso Superbet com `verbosity`
+diferente). Total acumulado: 16. Cota usada ao final: 35/250 (`/v4/account`,
+sempre isento, não conta nesse total) — 215 restantes.

@@ -1,4 +1,4 @@
-import { normalizarNome } from "./texto";
+import { normalizarNome, nomeCorresponde } from "./texto";
 
 export type FixtureBasico = {
   fixtureId: string;
@@ -7,12 +7,6 @@ export type FixtureBasico = {
   participant1ShortName?: string;
   participant2ShortName?: string;
 };
-
-function bate(alvo: string, nome: string, curto: string): boolean {
-  if (!nome && !curto) return false;
-  if (nome === alvo || curto === alvo) return true;
-  return (nome.length > 0 && (nome.includes(alvo) || alvo.includes(nome))) || (curto.length > 0 && curto === alvo);
-}
 
 /**
  * Casa "Time A x Time B" contra a lista de fixtures do torneio, com
@@ -34,7 +28,10 @@ export function encontrarFixture(jogoTexto: string, fixtures: FixtureBasico[]): 
     const s1 = f.participant1ShortName ? normalizarNome(f.participant1ShortName) : "";
     const s2 = f.participant2ShortName ? normalizarNome(f.participant2ShortName) : "";
 
-    return (bate(a, p1, s1) && bate(b, p2, s2)) || (bate(a, p2, s2) && bate(b, p1, s1));
+    return (
+      (nomeCorresponde(a, p1, s1) && nomeCorresponde(b, p2, s2)) ||
+      (nomeCorresponde(a, p2, s2) && nomeCorresponde(b, p1, s1))
+    );
   });
 
   return candidatos.length === 1 ? candidatos[0] : null;

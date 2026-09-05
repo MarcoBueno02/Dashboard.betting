@@ -1,5 +1,125 @@
 [
   {
+    "marketId": 101,
+    "marketType": "1x2",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 103,
+        "outcomeName": "2"
+      },
+      {
+        "outcomeId": 102,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 101,
+        "outcomeName": "1"
+      }
+    ]
+  },
+  {
+    "marketId": 10208,
+    "marketType": "1x2",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10209,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 10208,
+        "outcomeName": "1"
+      },
+      {
+        "outcomeId": 10210,
+        "outcomeName": "2"
+      }
+    ]
+  },
+  {
+    "marketId": 10211,
+    "marketType": "1x2",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10213,
+        "outcomeName": "2"
+      },
+      {
+        "outcomeId": 10212,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 10211,
+        "outcomeName": "1"
+      }
+    ]
+  },
+  {
+    "marketId": 10764,
+    "marketType": "1x2-corners",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10765,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 10764,
+        "outcomeName": "1"
+      },
+      {
+        "outcomeId": 10766,
+        "outcomeName": "2"
+      }
+    ]
+  },
+  {
+    "marketId": 101532,
+    "marketType": "1x2-corners",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101533,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 101534,
+        "outcomeName": "2"
+      },
+      {
+        "outcomeId": 101532,
+        "outcomeName": "1"
+      }
+    ]
+  },
+  {
+    "marketId": 101717,
+    "marketType": "1x2-corners",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101718,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 101717,
+        "outcomeName": "1"
+      },
+      {
+        "outcomeId": 101719,
+        "outcomeName": "2"
+      }
+    ]
+  },
+  {
     "marketId": 104,
     "marketType": "bothteamsscore",
     "period": "fulltime",
@@ -44,6 +164,66 @@
       {
         "outcomeId": 10302,
         "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 101902,
+    "marketType": "doublechance",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101903,
+        "outcomeName": "12"
+      },
+      {
+        "outcomeId": 101904,
+        "outcomeName": "2X"
+      },
+      {
+        "outcomeId": 101902,
+        "outcomeName": "1X"
+      }
+    ]
+  },
+  {
+    "marketId": 101905,
+    "marketType": "doublechance",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101907,
+        "outcomeName": "2X"
+      },
+      {
+        "outcomeId": 101906,
+        "outcomeName": "12"
+      },
+      {
+        "outcomeId": 101905,
+        "outcomeName": "1X"
+      }
+    ]
+  },
+  {
+    "marketId": 101908,
+    "marketType": "doublechance",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101909,
+        "outcomeName": "12"
+      },
+      {
+        "outcomeId": 101908,
+        "outcomeName": "1X"
+      },
+      {
+        "outcomeId": 101910,
+        "outcomeName": "2X"
       }
     ]
   },
@@ -1420,6 +1600,1110 @@
       {
         "outcomeId": 10283,
         "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10914,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 10915,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10914,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10916,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 10917,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10916,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10918,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 10918,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10919,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10920,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 10920,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10921,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10922,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 10923,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10922,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10924,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 10924,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10925,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10926,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 10926,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10927,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10928,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 10929,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10928,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10930,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 10931,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10930,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10932,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 10932,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10933,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10934,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 10935,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10934,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10936,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 10936,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10937,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10938,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 10938,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10939,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10940,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 10941,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10940,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10942,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 10942,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10943,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10944,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 10945,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10944,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10946,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 10946,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10947,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10948,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 10948,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10949,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10950,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 10950,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10951,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10952,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 10953,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10952,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10954,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 10.5,
+    "outcomes": [
+      {
+        "outcomeId": 10955,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10954,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10956,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 11.0,
+    "outcomes": [
+      {
+        "outcomeId": 10957,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10956,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10958,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 11.5,
+    "outcomes": [
+      {
+        "outcomeId": 10958,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10959,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10960,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 12.0,
+    "outcomes": [
+      {
+        "outcomeId": 10961,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10960,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10962,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 12.5,
+    "outcomes": [
+      {
+        "outcomeId": 10962,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10963,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10964,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 13.0,
+    "outcomes": [
+      {
+        "outcomeId": 10964,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10965,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10966,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 13.5,
+    "outcomes": [
+      {
+        "outcomeId": 10966,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 10967,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 10968,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 14.0,
+    "outcomes": [
+      {
+        "outcomeId": 10969,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10968,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10970,
+    "marketType": "totals-bookings",
+    "period": "fulltime",
+    "handicap": 14.5,
+    "outcomes": [
+      {
+        "outcomeId": 10971,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 10970,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101123,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 101124,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101123,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101125,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 101125,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101126,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101127,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 101127,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101128,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101129,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 101129,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101130,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101131,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 101132,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101131,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101133,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 101133,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101134,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101135,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 101135,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101136,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101137,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 101138,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101137,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101139,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 101139,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101140,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101141,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 101141,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101142,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101143,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 101143,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101144,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101145,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 101146,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101145,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101147,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 101147,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101148,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101149,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 101149,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101150,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101151,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 101151,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101152,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101153,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 101153,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101154,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101155,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 101155,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101156,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101157,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 101157,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101158,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101159,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 101159,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101160,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101161,
+    "marketType": "totals-bookings",
+    "period": "p1",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 101161,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101162,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101260,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 0.5,
+    "outcomes": [
+      {
+        "outcomeId": 101261,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101260,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101262,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 1.0,
+    "outcomes": [
+      {
+        "outcomeId": 101262,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101263,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101264,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 1.5,
+    "outcomes": [
+      {
+        "outcomeId": 101264,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101265,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101266,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 2.0,
+    "outcomes": [
+      {
+        "outcomeId": 101266,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101267,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101268,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 2.5,
+    "outcomes": [
+      {
+        "outcomeId": 101268,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101269,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101270,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 3.0,
+    "outcomes": [
+      {
+        "outcomeId": 101271,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101270,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101272,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 3.5,
+    "outcomes": [
+      {
+        "outcomeId": 101273,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101272,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101274,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 4.0,
+    "outcomes": [
+      {
+        "outcomeId": 101275,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101274,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101276,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 4.5,
+    "outcomes": [
+      {
+        "outcomeId": 101276,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101277,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101278,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 5.0,
+    "outcomes": [
+      {
+        "outcomeId": 101279,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101278,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101280,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 5.5,
+    "outcomes": [
+      {
+        "outcomeId": 101280,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101281,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101282,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 6.0,
+    "outcomes": [
+      {
+        "outcomeId": 101282,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101283,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101284,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 6.5,
+    "outcomes": [
+      {
+        "outcomeId": 101285,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101284,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101286,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 7.0,
+    "outcomes": [
+      {
+        "outcomeId": 101286,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101287,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101288,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 7.5,
+    "outcomes": [
+      {
+        "outcomeId": 101289,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101288,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101290,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 8.0,
+    "outcomes": [
+      {
+        "outcomeId": 101291,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101290,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101292,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 8.5,
+    "outcomes": [
+      {
+        "outcomeId": 101293,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101292,
+        "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 101294,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 9.0,
+    "outcomes": [
+      {
+        "outcomeId": 101294,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101295,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101296,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 9.5,
+    "outcomes": [
+      {
+        "outcomeId": 101296,
+        "outcomeName": "Mais"
+      },
+      {
+        "outcomeId": 101297,
+        "outcomeName": "Menos"
+      }
+    ]
+  },
+  {
+    "marketId": 101298,
+    "marketType": "totals-bookings",
+    "period": "p2",
+    "handicap": 10.0,
+    "outcomes": [
+      {
+        "outcomeId": 101299,
+        "outcomeName": "Menos"
+      },
+      {
+        "outcomeId": 101298,
+        "outcomeName": "Mais"
       }
     ]
   },
