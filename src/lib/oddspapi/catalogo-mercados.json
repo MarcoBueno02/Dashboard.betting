@@ -60,6 +60,66 @@
     ]
   },
   {
+    "marketId": 10911,
+    "marketType": "1x2-bookings",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10911,
+        "outcomeName": "1"
+      },
+      {
+        "outcomeId": 10913,
+        "outcomeName": "2"
+      },
+      {
+        "outcomeId": 10912,
+        "outcomeName": "X"
+      }
+    ]
+  },
+  {
+    "marketId": 101120,
+    "marketType": "1x2-bookings",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101122,
+        "outcomeName": "2"
+      },
+      {
+        "outcomeId": 101121,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 101120,
+        "outcomeName": "1"
+      }
+    ]
+  },
+  {
+    "marketId": 101257,
+    "marketType": "1x2-bookings",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101258,
+        "outcomeName": "X"
+      },
+      {
+        "outcomeId": 101257,
+        "outcomeName": "1"
+      },
+      {
+        "outcomeId": 101259,
+        "outcomeName": "2"
+      }
+    ]
+  },
+  {
     "marketId": 10764,
     "marketType": "1x2-corners",
     "period": "fulltime",
@@ -4288,6 +4348,102 @@
       {
         "outcomeId": 101778,
         "outcomeName": "Mais"
+      }
+    ]
+  },
+  {
+    "marketId": 10316,
+    "marketType": "wintonil-team1",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10317,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 10316,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 101911,
+    "marketType": "wintonil-team1",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101912,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 101911,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 101915,
+    "marketType": "wintonil-team1",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101916,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 101915,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 10318,
+    "marketType": "wintonil-team2",
+    "period": "fulltime",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 10319,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 10318,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 101913,
+    "marketType": "wintonil-team2",
+    "period": "p1",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101914,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 101913,
+        "outcomeName": "Sim"
+      }
+    ]
+  },
+  {
+    "marketId": 101917,
+    "marketType": "wintonil-team2",
+    "period": "p2",
+    "handicap": 0.0,
+    "outcomes": [
+      {
+        "outcomeId": 101918,
+        "outcomeName": "Não"
+      },
+      {
+        "outcomeId": 101917,
+        "outcomeName": "Sim"
       }
     ]
   }

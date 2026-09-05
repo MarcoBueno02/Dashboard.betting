@@ -1,7 +1,17 @@
 import catalogo from "./catalogo-mercados.json";
 import { semAcentos, normalizarNome, nomeCorresponde } from "./texto";
 
-type MarketType = "totals" | "totals-corners" | "totals-bookings" | "bothteamsscore" | "1x2" | "1x2-corners" | "doublechance";
+type MarketType =
+  | "totals"
+  | "totals-corners"
+  | "totals-bookings"
+  | "bothteamsscore"
+  | "1x2"
+  | "1x2-corners"
+  | "1x2-bookings"
+  | "doublechance"
+  | "wintonil-team1"
+  | "wintonil-team2";
 type Period = "fulltime" | "p1" | "p2";
 
 type CatalogoMercado = {
@@ -42,6 +52,21 @@ function detectarPeriodo(texto: string): Period {
   if (/\b1[ºo°]?\s*tempo\b|primeiro tempo|\b1t\b|\bht\b/.test(texto)) return "p1";
   if (/\b2[ºo°]?\s*tempo\b|segundo tempo|\b2t\b/.test(texto)) return "p2";
   return "fulltime";
+}
+
+/**
+ * Remove marcadores de período ("HT", "1T", "2T", "1º tempo"...) antes de
+ * extrair a linha numérica do Over/Under — sem isso, "Under 2T 1.5" lia o
+ * "2" de "2T" como se fosse a linha, ignorando o "1.5" de verdade.
+ */
+function removerMarcadoresDePeriodo(texto: string): string {
+  return texto
+    .replace(/\b1[ºo°]?\s*tempo\b/gi, "")
+    .replace(/\b2[ºo°]?\s*tempo\b/gi, "")
+    .replace(/primeiro tempo/gi, "")
+    .replace(/segundo tempo/gi, "")
+    .replace(/\b[12]t\b/gi, "")
+    .replace(/\bht\b/gi, "");
 }
 
 function acharMercado(marketType: MarketType, period: Period, handicap: number): CatalogoMercado | undefined {
@@ -89,7 +114,7 @@ function parseOverUnder(mercadoNome: string, entradaTexto: string, textoCompleto
   const ehUnder = /\b(menos de|under|abaixo de)\b/.test(textoEntrada);
   if (ehOver === ehUnder) return null;
 
-  const numeroMatch = entradaTexto.match(/(\d+[.,]\d+|\d+)/);
+  const numeroMatch = removerMarcadoresDePeriodo(entradaTexto).match(/(\d+[.,]\d+|\d+)/);
   if (!numeroMatch) return null;
   const linha = parseFloat(numeroMatch[1].replace(",", "."));
   if (Number.isNaN(linha)) return null;
@@ -121,7 +146,15 @@ function detectarLadoOuTime(entradaTexto: string): LadoOuTime | null {
   if (/\bmandante\b|\bcasa\b/.test(t)) return { lado: "1" };
   if (/\bvisitante\b|\bfora\b/.test(t)) return { lado: "2" };
 
-  const nomeTime = limpo.replace(/\b(vence|vencer|ganha|ganhar)\b/gi, "").trim();
+  // Remove verbos/frases de apoio comuns ("vence", "sem sofrer gol") pra
+  // isolar só o nome do time — usado tanto por Resultado/Dupla Chance
+  // quanto por Vitória Sem Sofrer ("Fluminense vence sem sofrer").
+  const nomeTime = limpo
+    .replace(/\b(vence|vencer|ganha|ganhar)\b/gi, "")
+    .replace(/\bsem\s+sofrer(\s+gols?)?\b/gi, "")
+    .replace(/\bsem\s+tomar\s+gols?\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
   return nomeTime ? { time: nomeTime } : null;
 }
 
@@ -138,7 +171,7 @@ function resolverLado(alvo: LadoOuTime, fixture: FixtureParaResolucao): "1" | "x
   return bate1 ? "1" : "2";
 }
 
-function parse1x2(marketType: "1x2" | "1x2-corners", entradaTexto: string, period: Period): EntradaParcial | null {
+function parse1x2(marketType: "1x2" | "1x2-corners" | "1x2-bookings", entradaTexto: string, period: Period): EntradaParcial | null {
   const alvo = detectarLadoOuTime(entradaTexto);
   if (!alvo) return null;
 
@@ -215,6 +248,40 @@ function resolverDuplaChanceOutcome(par: string, period: Period): EntradaParcial
 }
 
 /**
+ * Vitória Sem Sofrer: mercado próprio por time (wintonil-team1/team2, cada
+ * um com um único outcome binário Sim/Não) — não existe um "1x2" combinado
+ * pra isso. A entrada nomeia o time (ou mandante/visitante); resolve pro
+ * outcome "Sim" desse time. "Empate" não faz sentido aqui e é recusado.
+ */
+function parseVitoriaSemSofrer(entradaTexto: string, period: Period): EntradaParcial | null {
+  const alvo = detectarLadoOuTime(entradaTexto);
+  if (!alvo) return null;
+
+  const resolverOutcome = (ladoTime: "1" | "2"): EntradaResolvida | null => {
+    const marketType: MarketType = ladoTime === "1" ? "wintonil-team1" : "wintonil-team2";
+    const mercado = acharMercado(marketType, period, 0);
+    if (!mercado) return null;
+    const outcome = acharOutcomePorNome(mercado, "sim");
+    if (!outcome) return null;
+    return resolvido(mercado, outcome);
+  };
+
+  if ("lado" in alvo) {
+    if (alvo.lado === "x") return null; // "empate" não se aplica a esse mercado
+    const resolvida = resolverOutcome(alvo.lado);
+    return resolvida ? { pronta: true, resolvida } : null;
+  }
+
+  return {
+    pronta: false,
+    resolver: (fixture) => {
+      const lado = resolverLado(alvo, fixture);
+      return lado && lado !== "x" ? resolverOutcome(lado) : null;
+    },
+  };
+}
+
+/**
  * Traduz (mercado + entrada) do formato livre do dashboard pro marketId +
  * outcomeId da OddsPapi. Nunca adivinha: qualquer padrão não reconhecido
  * retorna null sem gastar nenhuma chamada de API. Mercados que dependem de
@@ -237,6 +304,10 @@ export function parseEntrada(mercadoNome: string, entradaTexto: string): Entrada
     return parseAmbasMarcam(textoCompleto, period);
   }
 
+  if (/vitoria sem sofrer|vence sem sofrer|sem sofrer gol|sem tomar gol/.test(textoCompleto)) {
+    return parseVitoriaSemSofrer(entradaTexto, period);
+  }
+
   if (/dupla chance/.test(textoCompleto)) {
     return parseDuplaChance(entradaTexto, period);
   }
@@ -247,6 +318,10 @@ export function parseEntrada(mercadoNome: string, entradaTexto: string): Entrada
 
   if (/escanteio|corner|canto/.test(textoCompleto) && /\b1x2\b|resultado/.test(textoCompleto)) {
     return parse1x2("1x2-corners", entradaTexto, period);
+  }
+
+  if (/cart[aã]o|cartoes/.test(textoCompleto) && /\b1x2\b|resultado/.test(textoCompleto)) {
+    return parse1x2("1x2-bookings", entradaTexto, period);
   }
 
   const overUnder = parseOverUnder(mercadoNome, entradaTexto, textoCompleto, period);

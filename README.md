@@ -385,9 +385,9 @@ confirmada tinha essa odd no momento) e `cota_excedida`.
 ### Mercados suportados
 
 Gols O/U, Escanteios O/U, Cartões O/U, Ambas Marcam, Resultado (1x2),
-Dupla Chance e Escanteios 1x2 — cada um em tempo completo, 1º tempo ou 2º
-tempo onde a OddsPapi tiver essa variante. `entrada` precisa seguir um
-desses padrões (`src/lib/oddspapi/mercados.ts`):
+Dupla Chance, Escanteios 1x2, Cartões 1x2 e Vitória Sem Sofrer — cada um em
+tempo completo, 1º tempo ou 2º tempo onde a OddsPapi tiver essa variante.
+`entrada` precisa seguir um desses padrões (`src/lib/oddspapi/mercados.ts`):
 
 - **Over/Under** (Gols, Escanteios ou Cartões): `"Over 2.5 Gols"`,
   `"Under 2.5"`, `"Mais de 2.5 gols"`, `"Menos de 8.5 escanteios"` —
@@ -397,26 +397,59 @@ desses padrões (`src/lib/oddspapi/mercados.ts`):
   entrada ("escanteio"/"corner", "cartão"), senão assume gols.
 - **Ambas Marcam**: `"Sim"` / `"Não"` — precisa ter um dos dois (não os
   dois, nem nenhum).
-- **Resultado / Escanteios 1x2**: `"<Time> vence"`, `"Empate"`,
-  `"Mandante"`/`"Casa"`, `"Visitante"`/`"Fora"`, ou o token cru `"1"`/`"X"`/
-  `"2"`. Quando a entrada cita um nome de time, ele só é resolvido **depois**
-  do jogo já ter sido encontrado (é preciso saber quem é `participant1`/
-  `participant2` na fixture real pra saber se "Fluminense vence" é `1` ou
-  `2`) — nunca assume que um lado é sempre o mesmo outcome.
+- **Resultado / Escanteios 1x2 / Cartões 1x2**: `"<Time> vence"`,
+  `"Empate"`, `"Mandante"`/`"Casa"`, `"Visitante"`/`"Fora"`, ou o token cru
+  `"1"`/`"X"`/`"2"`. Quando a entrada cita um nome de time, ele só é
+  resolvido **depois** do jogo já ter sido encontrado (é preciso saber
+  quem é `participant1`/`participant2` na fixture real pra saber se
+  "Fluminense vence" é `1` ou `2`) — nunca assume que um lado é sempre o
+  mesmo outcome.
 - **Dupla Chance**: `"<Time> ou Empate"`, `"<Time A> ou <Time B>"`,
   `"Mandante ou Empate"`, `"Visitante ou Empate"`, ou o token cru `"1X"`/
   `"12"`/`"X2"`.
-- `"1º tempo"`/`"2º tempo"`/`"HT"` em `mercado` ou `entrada` seleciona o
-  período; sem isso, assume tempo completo.
+- **Vitória Sem Sofrer**: `"<Time>"`, `"<Time> vence sem sofrer"`,
+  `"Mandante"`/`"Visitante"`. Diferente dos outros 1x2, cada time tem seu
+  próprio mercado na OddsPapi (`wintonil-team1`/`wintonil-team2`, outcome
+  binário Sim/Não) — não existe um "1x2" combinado pra isso; "Empate" não
+  se aplica e é recusado.
+- `"1º tempo"`/`"2º tempo"`/`"HT"`/`"1T"`/`"2T"` em `mercado` ou `entrada`
+  seleciona o período; sem isso, assume tempo completo. A linha numérica do
+  Over/Under é extraída *depois* de remover esses marcadores do texto —
+  sem isso, `"Under 2T 1.5"` lia o `2` de `"2T"` como se fosse a linha
+  (bug real, corrigido na Fase 3.2 — ver checklist abaixo).
 
 Mercados compostos/exóticos já cadastrados no app mas sem correspondência
 1:1 num único mercado da OddsPapi (`"Resultado/DC"`, `"Resultado/DC/DNB"`,
 produtos combinados de casa específica) são recusados explicitamente, e
 não caem por engano no mercado de Dupla Chance só por conterem "DC" no
-nome. Qualquer outra coisa fora desses padrões (handicap asiático, "Vitória
-Sem Sofrer" — identificado no catálogo como `wintonil-team1`/`wintonil-team2`
-mas ainda não implementado, "Geral", etc.) retorna `mercado_nao_suportado`
-sem gastar nenhuma chamada de API.
+nome. Qualquer outra coisa fora desses padrões (handicap asiático, "Geral",
+um mercado de "2+ cartões pra cada time" — não existe na taxonomia da
+OddsPapi, ver checklist abaixo, etc.) retorna `mercado_nao_suportado` sem
+gastar nenhuma chamada de API.
+
+### Checklist Nível A (Fase 3.2) — cobertura confirmada item a item
+
+Os 11 mercados que o sistema de apostas do usuário analisa pra qualquer
+jogo, conferidos um a um contra o catálogo real e testados contra jogos
+reais (Brasileirão Série A) onde implementados nesta fase:
+
+| # | Mercado | Status |
+|---|---------|--------|
+| 1 | Resultado (1x2) | Coberto (Fase 3.1) |
+| 2 | Dupla Chance | Coberto (Fase 3.1) |
+| 3 | Escanteios 1x2 | Coberto (Fase 3.1) |
+| 4 | Escanteios O/U (múltiplas linhas) | Coberto (Fase 3) |
+| 5 | Gols O/U (múltiplas linhas) | Coberto (Fase 3.1 — bug do nome do mercado corrigido) |
+| 6 | Ambas Marcam | Coberto (Fase 3) |
+| 7 | Vitória Sem Sofrer | **Implementado agora** — `wintonil-team1`/`wintonil-team2`. Testado real: estrelabet tem odd pros dois times (Fluminense 3,75 / Vasco 5,00); betano e superbet não tinham esse mercado específico pra essa fixture no momento do teste |
+| 8 | Cartões O/U (total da partida) | Coberto (Fase 3.1 — `totals-bookings`) |
+| 9 | Cartões 1x2 (qual time recebe mais cartões) | **Implementado agora** — `1x2-bookings` existe no catálogo (mesma estrutura de `1x2-corners`). Testado real: odd disponível nas 3 casas confirmadas |
+| 10 | Escanteios/Cartões/Gols segmentados por 1º/2º tempo | **Confirmado + bug corrigido**: os `marketId` de período já existiam desde a Fase 3, mas o parsing da linha numérica lia o dígito do marcador de período (`"2T"`) como se fosse a linha — `"Under 2T 1.5"` virava linha `2`, não `1.5`. Corrigido e testado real (`"Gols HT" + "Over 0.5"`, `"Escanteios O/U" + "Under 2T 1.5"`, ambos com odd real correta) |
+| 11 | Ambas equipes recebem cartão / 2+ cartões cada | **Não existe no catálogo.** Procurei por qualquer `marketType` de futebol envolvendo cartões combinado com "bothteams" ou um padrão de handicap por time — o catálogo tem `teamtotals-bookings-team1`/`team2` (Over/Under de cartões *por time*, dois mercados separados) mas nenhum mercado único de "os dois times tomam cartão"/"os dois times 2+ cartões". Não forcei uma aproximação combinando os dois mercados de time — reporto como não suportado |
+
+Item 11 fica de fora até a OddsPapi (ou algum jeito legítimo de compor os
+dois mercados de time sem aproximar) oferecer isso — não é uma lacuna de
+implementação, é ausência real no catálogo.
 
 ### Bug corrigido (Fase 3.1): Gols O/U não funcionava com o nome real do mercado
 
@@ -557,7 +590,13 @@ cegamente, mas deixou de ser "desconhecido" — passa a fazer parte dos
 mercados normalmente suportados.
 
 **Chamadas reais de API gastas**: Fase 3 original: 8. Fase 3.1 (bug do
-Superbet + ampliação de mercados): mais 8 (`/v4/fixtures` ×2, `/v4/odds`
-×6, sendo 3 delas só pra investigar o caso Superbet com `verbosity`
-diferente). Total acumulado: 16. Cota usada ao final: 35/250 (`/v4/account`,
-sempre isento, não conta nesse total) — 215 restantes.
+Superbet + ampliação de mercados): 8. Fase 3.2 (checklist Nível A —
+Vitória Sem Sofrer, Cartões 1x2, bug do marcador de período): 2
+(`/v4/fixtures` ×1, `/v4/odds` ×1 — todas as variações de mercado testadas
+contra a mesma fixture reaproveitaram a mesma entrada de cache, incluindo
+as buscas para os itens 7, 9 e 10 do checklist e a bateria de regressão).
+O catálogo completo (`/v4/markets`, `/v4/tournaments`) já baixado nas fases
+anteriores foi reaproveitado sem nenhuma chamada nova pra localizar
+`1x2-bookings` e `wintonil-team1`/`wintonil-team2` — busca local no arquivo
+já salvo, como pedido. Total acumulado: 18. Cota usada ao final: 39/250
+(`/v4/account`, sempre isento, não conta nesse total) — **211 restantes**.

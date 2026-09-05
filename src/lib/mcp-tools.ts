@@ -289,7 +289,7 @@ export function buildMcpServer(origin: string, apiToken: string) {
     "consultar_melhor_odd",
     {
       description:
-        "Busca automaticamente a melhor odd disponível pra uma entrada específica (jogo, competição, mercado e entrada — mesmo formato de criar_aposta), comparando as casas confirmadas. Suporta Gols/Escanteios/Cartões O/U, Ambas Marcam, Resultado (1x2), Dupla Chance e Escanteios 1x2, cada um em tempo completo, 1º ou 2º tempo; mercados fora desse conjunto (ex: mercados combinados como Resultado/DC) retornam mercado_nao_suportado. Trate o resultado como referência forte, não como confirmação final — confira no app antes de apostar de verdade.",
+        "Busca automaticamente a melhor odd disponível pra uma entrada específica (jogo, competição, mercado e entrada — mesmo formato de criar_aposta), comparando as casas confirmadas. Suporta Gols/Escanteios/Cartões O/U, Ambas Marcam, Resultado (1x2), Dupla Chance, Escanteios 1x2, Cartões 1x2 e Vitória Sem Sofrer, cada um em tempo completo, 1º ou 2º tempo; mercados fora desse conjunto (ex: mercados combinados como Resultado/DC, ou \"2+ cartões pra cada time\" — não existe na taxonomia da OddsPapi) retornam mercado_nao_suportado. Trate o resultado como referência forte, não como confirmação final — confira no app antes de apostar de verdade.",
       inputSchema: {
         jogo: z.string().describe('Ex: "Athletic Club x Vila Nova"'),
         competicao: z.string().describe('Ex: "Brasileirão Série B"'),
