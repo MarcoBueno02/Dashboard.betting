@@ -523,16 +523,52 @@ contrário.
 
 ### Mapeamento de torneios
 
-`TorneioMapeamento` (tabela nova) guarda `nomeInterno → tournamentId` da
-OddsPapi. Seedada com as duas competições já confirmadas manualmente
-(`Brasileirão Série B` → 390, `Primera División Argentina` → 155 —
-"Liga Profissional" no catálogo deles; os nomes não batem nem por
-aproximação, por isso essas duas *precisam* do seed manual). Pra qualquer
-outra competição, a resolução é dinâmica: busca `GET
-/v4/tournaments?sportId=10&language=pt` (cacheado 24h) e só vincula
+`TorneioMapeamento` guarda `nomeInterno → tournamentId` da OddsPapi. Pra
+qualquer competição sem linha na tabela, a resolução é dinâmica: busca
+`GET /v4/tournaments?sportId=10&language=pt` (cacheado 24h) e só vincula
 automaticamente se o nome bater de forma inequívoca (igual normalizado, ou
 contido um no outro, contanto que seja candidato único) — caso contrário
 retorna `torneio_nao_mapeado` em vez de arriscar um vínculo errado.
+
+**11 competições seedadas manualmente e confirmadas com odd real (Fase
+3.3)** — a lista fechada que o sistema de apostas do usuário acompanha:
+
+| Competição (`nomeInterno`) | `tournamentId` | Nome real na OddsPapi (pt) | Odd real confirmada em |
+|---|---|---|---|
+| Brasileirão Série A | 325 | Brasileirão Série A | betano, estrelabet, superbet |
+| Brasileirão Série B | 390 | Brasileirão Série B | betano, estrelabet, superbet |
+| Primera División Argentina | 155 | Liga Profissional | betano, estrelabet, superbet |
+| Copa Libertadores | 384 | Copa Libertadores | betano, estrelabet, superbet |
+| Copa Sul-Americana | 480 | Taça Sul-Americana | betano, estrelabet, superbet |
+| UEFA Champions League | 7 | Liga dos Campeões da UEFA | betano, estrelabet, superbet |
+| UEFA Europa League | 679 | Liga Europa UEFA | betano, estrelabet, superbet |
+| La Liga | 8 | La Liga | betano, estrelabet, superbet |
+| Serie A | 23 | Série A | betano, estrelabet, superbet |
+| Premier League | 17 | Premier League | betano, estrelabet, superbet |
+| Bundesliga | 35 | Bundesliga | betano, estrelabet, superbet |
+
+Nenhuma das 8 novas teria sido resolvida pelo casamento automático de nome
+— os nomes em português da OddsPapi não têm relação textual óbvia com os
+nomes em inglês/espanhol que o usuário usa (`"Liga dos Campeões da UEFA"`
+para `"UEFA Champions League"`, `"Taça Sul-Americana"` para `"Copa
+Sul-Americana"`, `"Liga Europa UEFA"` para `"UEFA Europa League"`) — por
+isso precisaram do mesmo seed manual que Série B e Primera División
+Argentina já tinham (migração
+`20260908122500_fase3_3_seed_torneios_confirmados`). Todas as 9 recém-
+seedadas (Série A já tinha vínculo automático, só faltava confirmar com
+teste real) foram testadas de verdade em Gols O/U — mercado escolhido por
+ser o mais universal — antes de marcar `confirmadoManualmente: true`;
+nenhuma foi marcada só por ter achado o `tournamentId`.
+
+`nomeInterno` usa exatamente o texto que o usuário passou no checklist
+(sem o país entre parênteses, que era só uma anotação pra desambiguar pra
+mim). Se o nome real salvo em `Competicao.nome` no banco de produção for
+ligeiramente diferente (acento, abreviação), a comparação já é normalizada
+— mas se divergir mais que isso, a resolução cai pro fallback dinâmico, que
+pode não achar uma correspondência única entre as ligas menores com nome
+parecido (ex: "Serie A" bate por conteúdo com várias divisões brasileiras
+menores) e retornar `torneio_nao_mapeado` por segurança. Vale conferir os
+nomes reais usados no app contra essa tabela.
 
 ### Cache e cota
 
@@ -598,5 +634,15 @@ as buscas para os itens 7, 9 e 10 do checklist e a bateria de regressão).
 O catálogo completo (`/v4/markets`, `/v4/tournaments`) já baixado nas fases
 anteriores foi reaproveitado sem nenhuma chamada nova pra localizar
 `1x2-bookings` e `wintonil-team1`/`wintonil-team2` — busca local no arquivo
-já salvo, como pedido. Total acumulado: 18. Cota usada ao final: 39/250
-(`/v4/account`, sempre isento, não conta nesse total) — **211 restantes**.
+já salvo, como pedido. Fase 3.3 (mapeamento de 9 competições novas): 24
+(1 `/v4/fixtures` × 8 competições + 1 `/v4/odds` × 8 + 6 chamadas
+**desperdiçadas** em `RATE_LIMITED` — disparei as 8 primeiras chamadas de
+`/v4/fixtures` em sequência sem respeitar o cooldown de 2000ms do endpoint,
+6 delas voltaram 429 e mesmo assim contaram pra cota; corrigido nas
+chamadas seguintes com espaçamento de ~2,5s. Fica registrado como lição:
+respostas 429 de rate limit contam pra cota mensal, diferente de token
+inválido ou cota já esgotada, que não contam + 2 do teste de ponta a
+ponta pelo próprio app (Premier League, reconfirmando o pipeline completo
+via `resolverTournamentId` lendo a tabela recém-seedada). Total
+acumulado: 42. Cota usada ao final: 69/250 (`/v4/account`, sempre isento,
+não conta nesse total) — **181 restantes**.
