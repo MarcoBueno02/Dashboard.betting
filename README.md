@@ -505,6 +505,65 @@ mercado específico pra essa fixture. Não é algo que o código consiga
 corrigir; o tratamento correto (distinguir erro de ausência) já estava
 certo e ficou mais explícito.
 
+### Bugs corrigidos (Fase 3.4): localização de jogo falhando (6 de 7 casos reais)
+
+Rodada de teste real (09/09): 6 de 7 jogos voltaram `jogo_nao_localizado`,
+inclusive 3 do Brasileirão Série B — a mesma competição do único que
+funcionou, no mesmo dia. Isso já descartava "torneio não mapeado" como
+causa. Duas causas raiz reais, nenhuma delas atraso de publicação da
+OddsPapi nem janela de data/fuso (a janela já era generosa — 24h pra trás,
+14 dias pra frente, em UTC absoluto, então não é sensível a fuso; e todos
+os 6 jogos já estavam na resposta bruta da API, com `hasOdds: true`,
+quando investigado):
+
+**1. Correspondência de nome por substring contíguo quebrava com sufixo de
+tipo de clube no meio** (`Botafogo SP x Novorizontino`, `Operário PR x
+CRB`) — o nome real da fonte é `"Botafogo FC SP"`/`"Operário Ferroviário
+EC PR"`: o "FC"/"EC" fica *entre* o nome e o sufixo de estado, quebrando
+qualquer checagem de substring contígua (`"botafogo fc sp".includes("botafogo sp")`
+é `false`). Corrigido em `src/lib/oddspapi/texto.ts` (`nomeCorresponde`):
+a comparação agora é por **conjunto de palavras** — todas as palavras do
+nome mais curto precisam aparecer (em qualquer posição) no nome mais
+longo, não mais como substring contígua. Generaliza pra qualquer sufixo
+inserido no meio (tipo de clube, sigla de federação, etc.), não é
+específico desses times.
+
+**2. Confrontos de ida e volta batiam duas vezes e a busca recusava por
+ambiguidade** (`Palmeiras x LDU Quito`, `Estudiantes x Corinthians`,
+`Santos x Atlético Mineiro` — os 3 casos de Libertadores/Sul-Americana).
+Nessas competições os mesmos dois times se enfrentam duas vezes dentro da
+janela de 14 dias, mandante e visitante invertidos no jogo de volta — as
+duas fixtures batem igualmente bem pelo nome, e o código antigo via 2
+candidatos e recusava (`candidatos.length === 1 ? ... : null`), mesmo
+quando um deles era claramente "o jogo de hoje". Corrigido em
+`src/lib/oddspapi/jogos.ts` (`encontrarFixture`): quando mais de uma
+fixture bate pelo nome, desempata pela mais próxima de agora (`startTime`
+vs. `Date.now()`) — nunca por "qual time parece mais certo", só por
+tempo, que é inequívoco assim que os dois lados já bateram pelo nome. Só
+continua recusando se o empate de distância também for exato.
+
+**3. `"CRB"` continua sem resolver — não é bug.** O nome real da fonte pra
+esse time é `"CR Brasil AL"`; `"CRB"` não é uma abreviação derivável dele
+por nenhuma regra genérica (confirmado: `"Operário PR x CR Brasil"` e
+`"Operário PR x Brasil AL"` resolvem normalmente, só a sigla popular
+`"CRB"` não). Criar um mapeamento pra esse caso específico seria hardcode
+de apelido de time — exatamente o que foi pedido pra não fazer. Continua
+retornando `jogo_nao_localizado`, corretamente: o usuário (ou a IA
+chamando a ferramenta) precisa usar um nome mais próximo do que a fonte
+usa (`"CR Brasil"` funciona).
+
+**Antes/depois** (mesmos parâmetros, testado contra a rodada real de
+09/09):
+
+| Jogo | Antes | Depois |
+|---|---|---|
+| Botafogo SP x Novorizontino | `jogo_nao_localizado` | odd real (betano 2,30) |
+| Operário PR x CRB | `jogo_nao_localizado` | `jogo_nao_localizado` (esperado — ver item 3) |
+| Palmeiras x LDU Quito | `jogo_nao_localizado` | odd real (superbet 2,17) |
+| Estudiantes x Corinthians | `jogo_nao_localizado` | odd real (superbet 3,85) |
+| Santos x Atlético Mineiro | `jogo_nao_localizado` | odd real (superbet 2,50) |
+| Fortaleza x Avaí (regressão) | odd real (superbet 2,32) | odd real (superbet 2,32) — sem mudança |
+
 ### Casas confirmadas
 
 `betano.bet.br`, `estrelabet.bet.br`, `superbet.bet.br`
@@ -644,5 +703,13 @@ respostas 429 de rate limit contam pra cota mensal, diferente de token
 inválido ou cota já esgotada, que não contam + 2 do teste de ponta a
 ponta pelo próprio app (Premier League, reconfirmando o pipeline completo
 via `resolverTournamentId` lendo a tabela recém-seedada). Total
-acumulado: 42. Cota usada ao final: 69/250 (`/v4/account`, sempre isento,
-não conta nesse total) — **181 restantes**.
+acumulado: 42. Cota usada ao final da Fase 3.3: 69/250.
+
+Fase 3.4 (diagnóstico + correção da falha de localização de jogo): 12
+(`/v4/fixtures` sem filtro `hasOdds` pra ver a lista bruta completa e
+comparar nomes exatos — 1 chamada por torneio nos 3 torneios envolvidos,
+sendo 1 delas rate-limited e recontada; depois da correção, confirmação
+de ponta a ponta pelo próprio endpoint: 3 chamadas de `/v4/fixtures`
+[cache já expirado desde a Fase 3.3] + 5 de `/v4/odds`, uma por jogo
+testado). Total acumulado: 54. Cota usada ao final: 85/250 (`/v4/account`,
+sempre isento, não conta nesse total) — **165 restantes**.
