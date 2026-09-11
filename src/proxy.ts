@@ -14,6 +14,10 @@ function isTokenApiRoute(pathname: string) {
   if (pathname === "/api/apostas/pendentes") return true;
   if (pathname === "/api/apostas/buscar") return true;
   if (/^\/api\/apostas\/[^/]+\/resultado$/.test(pathname)) return true;
+  // PATCH /api/apostas/:id (Fase 3.5) — o `(?!export$)` é essencial: sem
+  // ele esse padrão de "um segmento qualquer" bateria com /api/apostas/export
+  // também, expondo por engano a rota que precisa continuar exigindo cookie.
+  if (/^\/api\/apostas\/(?!export$)[^/]+$/.test(pathname)) return true;
   if (pathname === "/api/segmentado") return true;
   if (pathname === "/api/travas" || pathname.startsWith("/api/travas/")) return true;
   if (pathname === "/api/odds/melhor") return true;

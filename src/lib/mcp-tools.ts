@@ -219,6 +219,34 @@ export function buildMcpServer(origin: string, apiToken: string) {
   );
 
   server.registerTool(
+    "editar_aposta",
+    {
+      description:
+        "Corrige campos de uma aposta ainda PENDENTE (casa, odd, stake, entrada, mercado, competicao, notas, categoriaRisco, pJusta, evPercentual) — pra quando a casa/odd real muda entre montar o painel e apostar de fato. Não usar pra registrar resultado, isso é atualizar_resultado_aposta. Recusa editar aposta já resolvida. evPercentual recalcula sozinho se odd e/ou pJusta mudarem e você não mandar evPercentual explícito.",
+      inputSchema: {
+        id: z.string().describe("Id da aposta (use buscar_apostas ou listar_apostas_pendentes se não souber)"),
+        casa: z.string().optional(),
+        odd: z.number().optional(),
+        stake: z.number().optional(),
+        entrada: z.string().optional(),
+        mercado: z.string().optional(),
+        competicao: z.string().optional(),
+        notas: z.string().nullable().optional(),
+        categoriaRisco: z.enum(CATEGORIA_RISCO).nullable().optional(),
+        pJusta: z.number().nullable().optional(),
+        evPercentual: z.number().nullable().optional(),
+      },
+    },
+    async ({ id, ...body }) => {
+      const r = await callApi(`/api/apostas/${encodeURIComponent(id)}`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+      return textResult(r.body, !r.ok);
+    }
+  );
+
+  server.registerTool(
     "consultar_segmentado",
     {
       description:

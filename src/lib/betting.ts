@@ -42,6 +42,18 @@ export function computeLucro(retornoReal: Dec | null, stake: Dec): number | null
   return round2(n(retornoReal) - n(stake));
 }
 
+/**
+ * EV% padrão (probabilidade justa × odd - 1): fração esperada de retorno
+ * sobre a stake, dada a odd oferecida e a P_justa estimada (guardada como
+ * porcentagem, ex: 55 = 55%). Usado pra recalcular automaticamente quando
+ * odd ou pJusta mudam numa edição (Fase 3.5) — os dois precisam estar
+ * disponíveis, nunca inventa um valor com só um dos dois.
+ */
+export function computeEvPercentual(pJustaPercent: Dec, odd: Dec): number {
+  const p = n(pJustaPercent) / 100;
+  return round2((p * n(odd) - 1) * 100);
+}
+
 export function round2(value: number) {
   return Math.round(value * 100) / 100;
 }

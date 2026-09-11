@@ -125,6 +125,7 @@ sessão de navegador como sempre exigiu; ela não faz parte desta API por token.
 | POST    | `/api/apostas`                 | Cria uma ou várias apostas (objeto único ou array)     |
 | GET     | `/api/apostas/pendentes`       | Apostas com `status = PENDENTE`, ordenadas por data    |
 | GET     | `/api/apostas/buscar`          | Busca por `jogo` (parcial) e/ou `data` (YYYY-MM-DD)    |
+| PATCH   | `/api/apostas/:id`             | Edita campos de uma aposta ainda `PENDENTE` (Fase 3.5) |
 | PATCH   | `/api/apostas/:id/resultado`   | Atualiza status + retorno real de uma aposta           |
 | GET     | `/api/segmentado`              | Agregado Green/Red por competição × mercado            |
 | GET     | `/api/travas`                  | Lista travas (filtro opcional `status=ATIVA\|REMOVIDA`) |
@@ -137,6 +138,21 @@ sessão de navegador como sempre exigiu; ela não faz parte desta API por token.
 registro com esse nome exato, é criado automaticamente. Datas aceitam
 `"YYYY-MM-DD"` ou `"YYYY-MM-DDTHH:mm"`, sempre interpretadas como horário de
 Brasília.
+
+`PATCH /api/apostas/:id` (Fase 3.5) — pra corrigir casa/odd/stake/etc. de
+uma aposta que ainda não foi resolvida (ex: o usuário trocou de casa entre
+montar o painel e apostar de fato). Só aceita edição com
+`status = PENDENTE`; se já tiver resultado, `400` com mensagem pra usar
+`/resultado` em vez disso. Campos: `casa`, `odd`, `stake`, `entrada`,
+`mercado`, `competicao`, `notas`, `categoriaRisco`, `pJusta`,
+`evPercentual` — todos opcionais, manda só o que quer mudar.
+`casa`/`competicao`/`mercado` seguem a mesma auto-criação por nome do
+`POST`. `evPercentual` recalcula sozinho (`P_justa × odd - 1`) quando
+`odd` e/ou `pJusta` mudam e você não manda `evPercentual` explícito — só
+se os dois valores (o novo ou o que já estava salvo) estiverem
+disponíveis; nunca inventa um EV com dado faltando. `status`,
+`retornoReal` e `lucroPrejuizo` não são editáveis por aqui — isso continua
+sendo só via `/resultado`.
 
 ### Exemplos (`curl`)
 
@@ -185,6 +201,11 @@ curl -H "Authorization: Bearer $API_TOKEN" "$BASE/api/apostas/buscar?jogo=Gr%C3%
 
 # Listar com filtros
 curl -H "Authorization: Bearer $API_TOKEN" "$BASE/api/apostas?competicao=Copa%20do%20Brasil&status=PENDENTE"
+
+# Editar uma aposta pendente (casa/odd mudaram antes de apostar de fato)
+curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"casa": "Betnacional", "odd": 1.73}' \
+  "$BASE/api/apostas/<id>"
 
 # Atualizar resultado de uma aposta
 curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
@@ -298,9 +319,10 @@ pra isso.
 
 `consultar_bancas`, `atualizar_saldo_casa`, `criar_casa`, `criar_aposta`,
 `listar_apostas_pendentes`, `buscar_apostas`, `listar_apostas`,
-`atualizar_resultado_aposta`, `consultar_segmentado`, `listar_travas`,
-`criar_trava`, `atualizar_trava`, `consultar_melhor_odd` — uma pra cada rota
-principal da API (Fase 1 e Fase 3), com descrição em português pra cada uma.
+`editar_aposta`, `atualizar_resultado_aposta`, `consultar_segmentado`,
+`listar_travas`, `criar_trava`, `atualizar_trava`, `consultar_melhor_odd`
+— uma pra cada rota principal da API (Fase 1, 3 e 3.5), com descrição em
+português pra cada uma.
 
 ### Testado
 
@@ -713,3 +735,65 @@ de ponta a ponta pelo próprio endpoint: 3 chamadas de `/v4/fixtures`
 [cache já expirado desde a Fase 3.3] + 5 de `/v4/odds`, uma por jogo
 testado). Total acumulado: 54. Cota usada ao final: 85/250 (`/v4/account`,
 sempre isento, não conta nesse total) — **165 restantes**.
+
+## Editar aposta pendente (Fase 3.5)
+
+Problema real: casa/odd combinadas ao montar o painel às vezes mudam antes
+da aposta ser feita de fato (o usuário troca de casa na última hora); sem
+um jeito de corrigir o registro, isso virava compensação manual "de
+cabeça" no pós-mortem. `PATCH /api/apostas/:id` resolve isso — só pra
+apostas ainda `PENDENTE`, nunca reescreve silenciosamente uma aposta já
+resolvida (ver seção "Rotas" acima pra detalhes de campos).
+
+### Testado (os 3 casos pedidos)
+
+```bash
+export API_TOKEN="cole-seu-token-aqui"
+export BASE="https://dashboardbetting.vercel.app"
+
+# 1. Criar uma aposta de teste, editar casa e odd, confirmar que salvou
+ID=$(curl -s -X POST -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"data":"2026-09-11","competicao":"Teste","jogo":"Time A x Time B","mercado":"Teste","entrada":"Over 2.5","casa":"CasaOriginal","odd":1.80,"stake":10,"pJusta":60}' \
+  "$BASE/api/apostas" | python3 -c "import json,sys;print(json.load(sys.stdin)['criadas'][0]['id'])")
+
+curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"casa": "Betnacional", "odd": 1.73}' \
+  "$BASE/api/apostas/$ID"
+# → casa: "Betnacional", odd: 1.73, evPercentual: 3.8 (recalculado — pJusta já existia)
+
+# 2. Editar uma aposta já resolvida — confirma rejeição
+curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"status": "GREEN", "retornoReal": 17.3}' \
+  "$BASE/api/apostas/$ID/resultado"
+
+curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"odd": 2.0}' \
+  "$BASE/api/apostas/$ID"
+# → 400: "Aposta já resolvida (status \"GREEN\"), use /resultado se for
+#    corrigir o resultado, ou entre em contato se for erro de digitação
+#    no histórico"
+
+# 3. Editar SÓ a odd de uma aposta com pJusta salvo — confirma recálculo de EV
+ID2=$(curl -s -X POST -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"data":"2026-09-12","competicao":"Teste","jogo":"Time C x Time D","mercado":"Teste","entrada":"Under 1.5","casa":"CasaOriginal","odd":1.90,"stake":10,"pJusta":58}' \
+  "$BASE/api/apostas" | python3 -c "import json,sys;print(json.load(sys.stdin)['criadas'][0]['id'])")
+
+curl -X PATCH -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"odd": 2.10}' \
+  "$BASE/api/apostas/$ID2"
+# → odd: 2.1, pJusta: 58 (inalterado), evPercentual: 21.8 (recalculado
+#    automaticamente com o pJusta já salvo, sem precisar reenviá-lo)
+```
+
+Os 3 rodaram localmente contra Postgres real com esse resultado exato
+(inclusive os números de EV). `editar_aposta` testada com um cliente MCP
+real (`Client`/`InMemoryTransport`), editando `stake` e `notas` de uma das
+apostas de teste.
+
+Checagem de segurança feita antes de fechar: o padrão novo em
+`src/proxy.ts` (`/^\/api\/apostas\/(?!export$)[^/]+$/`) precisa cobrir
+`/api/apostas/:id` sem acidentalmente também liberar `/api/apostas/export`
+por token — `export` é a única rota pré-existente sob `/api/apostas/` que
+*tem* que continuar exigindo cookie de sessão. Confirmado com um `curl`
+sem cookie contra `/api/apostas/export`: continua redirecionando pro
+`/login` (307), não vira 401 JSON como as rotas de token.
