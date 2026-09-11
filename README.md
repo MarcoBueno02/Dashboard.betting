@@ -586,6 +586,55 @@ usa (`"CR Brasil"` funciona).
 | Santos x Atlético Mineiro | `jogo_nao_localizado` | odd real (superbet 2,50) |
 | Fortaleza x Avaí (regressão) | odd real (superbet 2,32) | odd real (superbet 2,32) — sem mudança |
 
+### Bug corrigido (Fase 3.6): "Athletico PR" não localizava — grafia + sigla de UF
+
+Novo caso, competição diferente (Brasileirão Série A, sem confrontos de
+ida/volta — as duas causas da Fase 3.4 não se aplicavam aqui de
+propósito, investigação própria). `"Coritiba x Athletico PR"` e
+`"Coritiba x Athletico Paranaense"` falhavam, mas `"Coritiba x Atletico
+Paranaense"` (sem "h") já funcionava — isso isolou a causa antes mesmo de
+olhar a resposta bruta da API.
+
+**Causa raiz — duas coisas diferentes, não uma:**
+
+1. **Grafia**: o nome real na fonte é `"Atlético Paranaense"` (sem "h",
+   grafia tradicional). O usuário (e a mídia esportiva em geral) escreve
+   `"Athletico"` — a grafia que o próprio clube readotou em 2019 por
+   motivo de marketing/história. A normalização de palavras não tinha
+   nenhuma noção de que "athletico" e "atletico" são a mesma palavra.
+2. **Sigla de UF**: mesmo corrigindo a grafia, `"Athletico PR"` sozinho
+   ainda falharia — `"pr"` não é a mesma palavra que `"paranaense"`. A
+   fonte mistura as duas convenções pro mesmo tipo de sufixo, até pro
+   mesmo estado: `"Atlético Mineiro"` usa o gentílico, mas `"Cruzeiro MG"`
+   usa a sigla crua. Confirmado que isso não é caso isolado do Athletico —
+   `"EC Vitória BA"` segue o mesmo padrão de sufixo de sigla.
+
+**Correção — duas regras genéricas, nenhuma delas alias de time**
+(`src/lib/oddspapi/texto.ts`):
+
+- Tabela fechada sigla-de-UF → gentílico (as 27 unidades federativas —
+  fato geográfico, não lista de times) usada como variante de palavra na
+  comparação: `"pr"` e `"paranaense"` passam a contar como a mesma
+  palavra nos dois sentidos, então funciona tanto pra quem escreve a
+  sigla quanto pra quem escreve o nome por extenso.
+- `"th"` tratado como variante de `"t"` na comparação de palavras — regra
+  genérica (português não usa esse dígrafo nativamente, então qualquer
+  "th" num nome de time é quase certamente essa grafia histórica
+  revivida), não hardcoded só pro Athletico.
+
+Testado sem falso positivo: `"Vitória BA x Bahia"` (dois times reais e
+diferentes do mesmo estado) continua resolvendo cada um pro seu lado
+certo, não colide.
+
+**Antes/depois**, testado contra jogos reais de hoje/desta semana:
+
+| Jogo | Antes | Depois |
+|---|---|---|
+| Coritiba x Athletico PR | `jogo_nao_localizado` | odd real (estrelabet 2,25) |
+| Coritiba x Athletico Paranaense | `jogo_nao_localizado` | odd real (estrelabet 2,25) |
+| Palmeiras x LDU Quito (regressão Fase 3.4) | odd real | odd real (superbet 2,40) — sem mudança |
+| Botafogo SP x Goiás (regressão Fase 3.4, jogo novo) | odd real | odd real (superbet 2,60) — sem mudança |
+
 ### Casas confirmadas
 
 `betano.bet.br`, `estrelabet.bet.br`, `superbet.bet.br`
@@ -733,8 +782,16 @@ comparar nomes exatos — 1 chamada por torneio nos 3 torneios envolvidos,
 sendo 1 delas rate-limited e recontada; depois da correção, confirmação
 de ponta a ponta pelo próprio endpoint: 3 chamadas de `/v4/fixtures`
 [cache já expirado desde a Fase 3.3] + 5 de `/v4/odds`, uma por jogo
-testado). Total acumulado: 54. Cota usada ao final: 85/250 (`/v4/account`,
-sempre isento, não conta nesse total) — **165 restantes**.
+testado). Total acumulado: 54. Cota usada ao final da Fase 3.4: 85/250.
+
+Fase 3.6 (novo caso "Athletico PR" — grafia + sigla de UF): 9 (1
+`/v4/fixtures` pra investigar o nome exato do Athletico Paranaense na
+Série A + confirmação de ponta a ponta pelo endpoint: `/v4/fixtures` +
+`/v4/odds` pra Série A, Libertadores e Série B — 2 delas gastas à toa
+tentando reaproveitar um fixture de Série B que já tinha sido jogado, fora
+da janela de 24h pra trás, corrigido pegando um jogo desta semana). Total
+acumulado: 63. Cota usada ao final: 110/250 (`/v4/account`, sempre
+isento, não conta nesse total) — **140 restantes**.
 
 ## Editar aposta pendente (Fase 3.5)
 
